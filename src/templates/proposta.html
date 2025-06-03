@@ -48,7 +48,7 @@ main {
                 </div>
                 <div class="info-item">
                     <span class="info-label">Consumo Indicado</span>
-                    <span class="info-value">{{ proposta.consumo_indicado|int }} kWh</span>
+                    <span class="info-value">{{ "{:,.0f}".format(proposta.consumo_indicado|int).replace(',', '.') }} kWh</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Mês de Referência</span>
@@ -73,30 +73,30 @@ main {
             <div class="calc-grid">
                 <div class="calc-card danger">
                     <div class="calc-title">Valor Atual (Concessionária s/ Bandeira)</div>
-                    <div class="calc-value">R$ {{ "%.2f"|format(proposta.pagar_energisa) }}</div>
+                    <div class="calc-value">R$ {{ "{:,.2f}".format(proposta.pagar_energisa).replace(',', '.').replace('.', ',') }}</div>
                 </div>
                 {% if proposta.taxa_bandeira > 0 %}
                 <div class="calc-card">
                     <div class="calc-title">Adicional de Bandeira</div>
-                    <div class="calc-value">R$ {{ "%.2f"|format(proposta.pagar_energisa_mais_bandeira - proposta.pagar_energisa) }}</div>
+                    <div class="calc-value">R$ {{ "{:,.2f}".format(proposta.pagar_energisa_mais_bandeira - proposta.pagar_energisa).replace(',', '.').replace('.', ',') }}</div>
                 </div>
                 <div class="calc-card danger">
                     <div class="calc-title">Total Atual com Bandeira</div>
-                    <div class="calc-value">R$ {{ "%.2f"|format(proposta.pagar_energisa_mais_bandeira) }}</div>
+                    <div class="calc-value">R$ {{ "{:,.2f}".format(proposta.pagar_energisa_mais_bandeira).replace(',', '.').replace('.', ',') }}</div>
                 </div>
                 {% else %}
                  <div class="calc-card">
                     <div class="calc-title">Adicional de Bandeira</div>
-                    <div class="calc-value">R$ 0.00</div>
+                    <div class="calc-value">R$ 0,00</div>
                 </div>
                <div class="calc-card danger">
                     <div class="calc-title">Total Atual</div>
-                    <div class="calc-value">R$ {{ "%.2f"|format(proposta.pagar_energisa_mais_bandeira) }}</div>
+                    <div class="calc-value">R$ {{ "{:,.2f}".format(proposta.pagar_energisa_mais_bandeira).replace(',', '.').replace('.', ',') }}</div>
                 </div>
                 {% endif %}
                 <div class="calc-card highlight">
-                    <div class="calc-title">Valor com Bowe ({{ "%.1f"|format(proposta.percentual_desconto) }}% desconto)</div>
-                    <div class="calc-value">R$ {{ "%.2f"|format(proposta.pagar_enersim) }}</div>
+                    <div class="calc-title">Valor com Bowe ({{ "{:.1f}".format(proposta.percentual_desconto).replace('.', ',') }}% desconto)</div>
+                    <div class="calc-value">R$ {{ "{:,.2f}".format(proposta.pagar_enersim).replace(',', '.').replace('.', ',') }}</div>
                 </div>
             </div>
         </div>
@@ -104,8 +104,8 @@ main {
         <!-- Destaque da Economia -->
         <div class="economy-highlight">
             <div class="economy-title">Sua Economia Mensal</div>
-            <div class="economy-value">R$ {{ "%.2f"|format(proposta.economia) }}</div>
-            <div class="economy-subtitle">Economia anual estimada de R$ {{ "%.2f"|format(proposta.economia_anual) }} ({{ "%.1f"|format(proposta.percentual_desconto) }}% de desconto)</div>
+            <div class="economy-value">R$ {{ "{:,.2f}".format(proposta.economia).replace(',', '.').replace('.', ',') }}</div>
+            <div class="economy-subtitle">Economia anual estimada de R$ {{ "{:,.2f}".format(proposta.economia_anual).replace(',', '.').replace('.', ',') }} ({{ "{:.1f}".format(proposta.percentual_desconto).replace('.', ',') }}% de desconto)</div>
         </div>
 
         <!-- Ações -->
@@ -125,7 +125,7 @@ main {
             </form>
             
             <!-- Falar com Atendente -->
-            <a href="https://wa.me/556592733787?text=Olá, gostaria de falar sobre a proposta {{ proposta.id_publico }}" class="btn btn-primary" target="_blank">
+            <a href="https://wa.me/5500000000000?text=Olá, gostaria de falar sobre a proposta {{ proposta.id_publico }}" class="btn btn-primary" target="_blank">
                  <i class="fas fa-headset"></i> Falar com um Atendente
             </a>
 
@@ -139,4 +139,3 @@ main {
     </div>
 </div>
 {% endblock %}
-
