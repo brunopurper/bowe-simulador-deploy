@@ -16,6 +16,19 @@
         border-radius: 10px;
         overflow: hidden;
     }
+    .btn-delete {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-delete:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+    .delete-modal .modal-header {
+        background-color: #dc3545;
+        color: white;
+    }
 </style>
 {% endblock %}
 
@@ -77,10 +90,10 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Economia Mensal (R$)</h5>
+                    <h5 class="mb-0">Propostas por Mês</h5>
                 </div>
                 <div class="card-body">
-                    <canvas id="economiaChart"></canvas>
+                    <canvas id="propostasChart"></canvas>
                 </div>
             </div>
         </div>
@@ -120,9 +133,9 @@
                                     <td>{{ proposta.data_criacao.strftime('%d/%m/%Y %H:%M') }}</td>
                                     <td>{{ proposta.nome_indicado }}</td>
                                     <td>{{ proposta.nome_vendedor }}</td>
-                                    <td>{{ proposta.consumo_indicado|int }}</td>
-                                    <td>R$ {{ "%.2f"|format(proposta.pagar_enersim) }}</td>
-                                    <td>R$ {{ "%.2f"|format(proposta.economia) }}</td>
+                                    <td>{{ "{:,.0f}".format(proposta.consumo_indicado).replace(',', '.') }}</td>
+                                    <td>R$ {{ "{:,.2f}".format(proposta.pagar_enersim).replace(',', '.').replace('.', ',') }}</td>
+                                    <td>R$ {{ "{:,.2f}".format(proposta.economia).replace(',', '.').replace('.', ',') }}</td>
                                     <td>
                                         {% if proposta.status == 'Aprovada' %}
                                         <span class="badge bg-success">Aprovada</span>
@@ -139,6 +152,9 @@
                                         <button class="btn btn-sm btn-info copy-link" data-link="{{ request.host_url }}proposta/{{ proposta.id_publico }}">
                                             <i class="fas fa-copy"></i>
                                         </button>
+                                        <button class="btn btn-sm btn-delete delete-proposta" data-id="{{ proposta.id }}" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -146,6 +162,27 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação para Excluir -->
+<div class="modal fade delete-modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir esta proposta? Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="POST" action="">
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
             </div>
         </div>
     </div>
@@ -186,30 +223,15 @@
             }
         });
 
-        // Dados para o gráfico de economia (simulados para exemplo)
-        // Em produção, estes dados viriam da API
-        const economiaLabels = [];
-        const economiaData = [];
-        
-        // Preencher com dados de exemplo (últimos 7 dias)
-        const hoje = new Date();
-        for (let i = 6; i >= 0; i--) {
-            const data = new Date(hoje);
-            data.setDate(data.getDate() - i);
-            economiaLabels.push(data.toLocaleDateString('pt-BR'));
-            // Valor aleatório entre 1000 e 5000 para exemplo
-            economiaData.push(Math.floor(Math.random() * 4000) + 1000);
-        }
-        
-        // Gráfico de economia mensal
-        const economiaCtx = document.getElementById('economiaChart').getContext('2d');
-        const economiaChart = new Chart(economiaCtx, {
+        // Gráfico de propostas por mês
+        const propostasCtx = document.getElementById('propostasChart').getContext('2d');
+        const propostasChart = new Chart(propostasCtx, {
             type: 'bar',
             data: {
-                labels: economiaLabels,
+                labels: {{ meses|tojson }},
                 datasets: [{
-                    label: 'Economia Gerada (R$)',
-                    data: economiaData,
+                    label: 'Propostas Geradas',
+                    data: {{ dados_mensais|tojson }},
                     backgroundColor: 'rgba(0, 123, 255, 0.5)',
                     borderColor: 'rgba(0, 123, 255, 1)',
                     borderWidth: 1
@@ -221,8 +243,18 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
+                            // Usar formatação de números inteiros
                             callback: function(value) {
-                                return 'R$ ' + value.toLocaleString('pt-BR');
+                                return value.toLocaleString('pt-BR');
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.toLocaleString('pt-BR') + ' propostas';
                             }
                         }
                     }
@@ -236,6 +268,12 @@
             navigator.clipboard.writeText(link).then(function() {
                 alert('Link copiado para a área de transferência!');
             });
+        });
+        
+        // Configurar modal de exclusão
+        $('.delete-proposta').click(function() {
+            const id = $(this).data('id');
+            $('#deleteForm').attr('action', '/excluir-proposta/' + id);
         });
         
         // Exportar para CSV

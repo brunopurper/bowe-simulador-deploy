@@ -42,6 +42,9 @@ def logout():
 @login_required
 def index():
     from src.models.proposta import Proposta
+    from sqlalchemy import func, extract
+    import datetime
+    
     propostas = Proposta.query.order_by(Proposta.data_criacao.desc()).all()
     
     # Calcular estatísticas para o dashboard
@@ -50,9 +53,50 @@ def index():
     propostas_recusadas = sum(1 for p in propostas if p.status == 'Recusada')
     propostas_pendentes = total_propostas - propostas_aprovadas - propostas_recusadas
     
+    # Calcular propostas por mês para o gráfico
+    # Obter o mês atual e os 5 meses anteriores
+    hoje = datetime.datetime.now()
+    meses = []
+    dados_mensais = []
+    
+    for i in range(5, -1, -1):
+        # Calcular o mês (atual - i)
+        data_mes = hoje.replace(day=1) - datetime.timedelta(days=i*30)
+        mes_ano = data_mes.strftime('%m/%Y')
+        meses.append(mes_ano)
+        
+        # Contar propostas deste mês
+        mes = data_mes.month
+        ano = data_mes.year
+        count = Proposta.query.filter(
+            extract('month', Proposta.data_criacao) == mes,
+            extract('year', Proposta.data_criacao) == ano
+        ).count()
+        
+        dados_mensais.append(count)
+    
     return render_template('dashboard.html', 
                           propostas=propostas,
                           total_propostas=total_propostas,
                           propostas_aprovadas=propostas_aprovadas,
                           propostas_recusadas=propostas_recusadas,
-                          propostas_pendentes=propostas_pendentes)
+                          propostas_pendentes=propostas_pendentes,
+                          meses=meses,
+                          dados_mensais=dados_mensais)
+
+@dashboard_bp.route('/excluir-proposta/<int:id>', methods=['POST'])
+@login_required
+def excluir_proposta(id):
+    from src.models.proposta import Proposta, db
+    
+    proposta = Proposta.query.get_or_404(id)
+    
+    try:
+        db.session.delete(proposta)
+        db.session.commit()
+        flash('Proposta excluída com sucesso!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao excluir proposta: {str(e)}', 'error')
+    
+    return redirect(url_for('dashboard.index'))
