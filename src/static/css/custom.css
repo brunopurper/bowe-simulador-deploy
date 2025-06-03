@@ -1,110 +1,66 @@
-/* Custom CSS for Bowe Simulador */
-
-/* Header & Branding */
-.card-header.bg-success {
-    background-color: #198754 !important; /* Keep original Bootstrap success, or choose a slightly lighter shade if preferred */
-    border-bottom: 3px solid #157347; /* Add a slightly darker border instead of full background */
-    /* background-color: transparent !important; */ /* Alternative: Transparent background */
-    /* border-bottom: 2px solid #198754; */
-    /* color: #198754 !important; */ /* Adjust text color if background is transparent */
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-}
-
-.proposal-header-logo {
-    text-align: right;
-}
-
-@media (max-width: 767.98px) {
-    .proposal-header-logo {
-        text-align: left;
-        margin-top: 1rem;
+/* Correção para rolagem horizontal da tabela no dashboard em dispositivos móveis */
+@media (max-width: 768px) {
+    /* Garantir que o container da tabela permita rolagem horizontal */
+    .table-responsive {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
     }
-    .proposal-header-logo img {
-        height: 50px;
+    
+    /* Garantir que a tabela tenha largura mínima para que as colunas não fiquem muito comprimidas */
+    #propostasTable {
+        min-width: 800px;
+    }
+    
+    /* Ajustar o tamanho das colunas para melhor visualização */
+    #propostasTable th, 
+    #propostasTable td {
+        white-space: nowrap;
+        padding: 0.5rem;
+    }
+    
+    /* Ajustar o card que contém a tabela */
+    .card-body {
+        padding: 0.5rem;
+    }
+    
+    /* Adicionar indicador visual de rolagem */
+    .table-responsive::after {
+        content: "◀ Deslize ▶";
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        z-index: 10;
+        pointer-events: none;
+        animation: fadeOut 3s forwards 3s;
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    
+    /* Garantir que o container pai não tenha overflow hidden */
+    .card {
+        overflow: visible;
+    }
+    
+    /* Ajustar o layout dos botões na coluna de ações */
+    #propostasTable .btn-sm {
+        padding: 0.25rem 0.5rem;
+        margin: 0.1rem;
     }
 }
 
-/* Color Palette & Consistency */
-.text-success {
-    color: #198754 !important;
+/* Garantir que o conteúdo principal não tenha overflow escondido */
+main, .container, .row, .col-md-12 {
+    overflow-x: visible;
 }
-
-/* Typography & Readability */
-body {
-    line-height: 1.6;
-}
-
-h3, .h3 {
-    margin-bottom: 1rem;
-}
-
-h4, .h4 {
-    margin-bottom: 0.75rem;
-}
-
-h5, .h5 {
-    margin-bottom: 0.5rem;
-}
-
-/* Spacing & Alignment */
-.icon-text-section .d-flex {
-    align-items: center;
-}
-
-.icon-text-section .fa-2x {
-    margin-right: 1rem;
-    width: 30px; /* Ensure consistent icon spacing */
-    text-align: center;
-}
-
-/* Element Styling */
-.card {
-    border-radius: 0.375rem; /* Standard Bootstrap radius */
-    border: 1px solid rgba(0, 0, 0, 0.125);
-}
-
-.card.shadow {
-    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.075) !important;
-}
-
-.table th.bg-dark {
-    padding-top: 0.9rem;
-    padding-bottom: 0.9rem;
-}
-
-.table td {
-    vertical-align: middle;
-}
-
-.alert-secondary small {
-    line-height: 1.4;
-    display: block;
-}
-
-/* Ensure buttons have consistent vertical alignment */
-.action-buttons .d-inline {
-    display: inline-block;
-    vertical-align: middle;
-    margin-bottom: 0.5rem; /* Add some space between stacked buttons on small screens */
-}
-
-.btn-lg {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.1rem;
-}
-
-/* PDF Export Button Placeholder Style (adjust as needed) */
-.btn-export-pdf {
-    /* Example: Use secondary color */
-    /* background-color: #6c757d; */
-    /* border-color: #6c757d; */
-    /* color: white; */
-}
-
-.btn-export-pdf:hover {
-    /* background-color: #5c636a; */
-    /* border-color: #565e64; */
-}
-
-
