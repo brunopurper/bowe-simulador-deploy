@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Compartilhar Proposta - Bowe{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Compartilhar Proposta</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-share-alt fa-4x text-primary mb-3"></i>
+                        <h3>Compartilhe esta proposta com o cliente</h3>
+                        <p class="lead">Proposta para: <strong>{{ proposta.nome_indicado }}</strong></p>
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <label for="linkProposta" class="form-label">Link da Proposta:</label>
+                        <div class="input-group">
+                            <input type="text" id="linkProposta" class="form-control" value="{{ link_completo }}" readonly>
+                            <button class="btn btn-primary" id="copyLink" type="button">
+                                <i class="fas fa-copy me-1"></i> Copiar
+                            </button>
+                        </div>
+                        <small class="text-muted">Este link é único para esta proposta.</small>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="d-grid gap-2">
+                                <a href="https://wa.me/?text={{ link_completo|urlencode }}" target="_blank" class="btn btn-success btn-lg">
+                                    <i class="fab fa-whatsapp me-2"></i> Compartilhar via WhatsApp
+                                </a>
+                                <a href="mailto:?subject=Proposta%20Bowe%20Energia%20para%20{{ proposta.nome_indicado|urlencode }}&body=Olá,%0D%0A%0D%0ASegue%20o%20link%20para%20acessar%20sua%20proposta%20de%20energia%20renovável:%0D%0A%0D%0A{{ link_completo|urlencode }}%0D%0A%0D%0AAtenciosamente,%0D%0A{{ proposta.nome_vendedor|urlencode }}" class="btn btn-info btn-lg text-white">
+                                    <i class="fas fa-envelope me-2"></i> Compartilhar via Email
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="{{ url_for('proposta.visualizar', id_publico=proposta.id_publico) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-1"></i> Voltar para a Proposta
+                        </a>
+                        <a href="{{ url_for('formulario.index') }}" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-plus me-1"></i> Nova Proposta
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Função para copiar o link para a área de transferência
+        $('#copyLink').click(function() {
+            var linkInput = document.getElementById('linkProposta');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999); // Para dispositivos móveis
+            
+            navigator.clipboard.writeText(linkInput.value).then(function() {
+                // Alterar o texto do botão temporariamente
+                var $btn = $('#copyLink');
+                var originalHtml = $btn.html();
+                $btn.html('<i class="fas fa-check me-1"></i> Copiado!');
+                $btn.removeClass('btn-primary').addClass('btn-success');
+                
+                // Restaurar o botão após 2 segundos
+                setTimeout(function() {
+                    $btn.html(originalHtml);
+                    $btn.removeClass('btn-success').addClass('btn-primary');
+                }, 2000);
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+
+{% block title %}Simulador de Propostas - Bowe{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center mb-4">
+            <h1>Simulador de Propostas</h1>
+            <h3>Bowe Energia</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Nova Proposta</h4>
+                </div>
+                <div class="card-body">
+                    <form id="propostaForm" method="POST" action="{{ url_for('formulario.index') }}">
+                        {{ form.csrf_token }}
+                        
+                        <!-- Campos ocultos do vendedor -->
+                        {{ form.nome_vendedor() }}
+                        {{ form.telefone_vendedor() }}
+                        {{ form.chave_pix() }}
+                        {{ form.cidade_indicador() }}
+                        {{ form.lider() }}
+                        {{ form.cpf_indicador() }}
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h5 class="border-bottom pb-2">Dados do Cliente</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="nome_indicado">Nome do Cliente*</label>
+                                    {{ form.nome_indicado(class="form-control", placeholder="Nome da empresa/cliente") }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="unidade_consumidora">Unidade Consumidora*</label>
+                                    {{ form.unidade_consumidora(class="form-control", placeholder="Número da UC") }}
+                                </div>
+                            </div>
+                            <!-- Campos ocultos do cliente -->
+                            {{ form.telefone_indicado() }}
+                            {{ form.email_indicado() }}
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h5 class="border-bottom pb-2">Dados de Consumo</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="consumo_indicado">Consumo (kWh)*</label>
+                                    {{ form.consumo_indicado(class="form-control calc-trigger", placeholder="Consumo em kWh") }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="tipo_rede">Tipo de Rede*</label>
+                                    {{ form.tipo_rede(class="form-control") }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="mes_atual">Mês de Referência*</label>
+                                    {{ form.mes_atual(class="form-control", placeholder="Mês/Ano") }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h5 class="border-bottom pb-2">Dados de Tarifas</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="taxa_concessionaria">Tarifa com Tributos (R$/kWh)*</label>
+                                    {{ form.taxa_concessionaria(class="form-control calc-trigger", placeholder="0.000") }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="taxa_bandeira">Taxa Bandeira (R$/kWh) (opcional)</label>
+                                    {{ form.taxa_bandeira(class="form-control calc-trigger", placeholder="0.00000") }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="percentual_desconto">Percentual de Desconto*</label>
+                                    {{ form.percentual_desconto(class="form-control calc-trigger") }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h5 class="border-bottom pb-2">Outros Dados</h5>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="modelo_contrato">Modelo de Contrato</label>
+                                    {{ form.modelo_contrato(class="form-control", placeholder="Modelo de contrato") }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h5 class="border-bottom pb-2">Resultados Calculados</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label>Valor a Pagar (Concessionária)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="text" id="pagar_energisa_display" class="form-control" readonly value="0.00">
+                                        {{ form.pagar_energisa(id="pagar_energisa_hidden") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label>Valor a Pagar (Concessionária + Bandeira)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="text" id="pagar_energisa_mais_bandeira_display" class="form-control" readonly value="0.00">
+                                        {{ form.pagar_energisa_mais_bandeira(id="pagar_energisa_mais_bandeira_hidden") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label>Valor a Pagar (Bowe)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="text" id="pagar_enersim_display" class="form-control" readonly value="0.00">
+                                        {{ form.pagar_enersim(id="pagar_enersim_hidden") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label>Economia Mensal</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="text" id="economia_display" class="form-control" readonly value="0.00">
+                                        {{ form.economia(id="economia_hidden") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label>Economia Anual</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="text" id="economia_anual_display" class="form-control" readonly value="0.00">
+                                        {{ form.economia_anual(id="economia_anual_hidden") }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label>Percentual de Economia</label>
+                                    <div class="input-group">
+                                        <input type="text" id="porcentagem_economia_display" class="form-control" readonly value="0.00">
+                                        <span class="input-group-text">%</span>
+                                        {{ form.porcentagem_economia(id="porcentagem_economia_hidden") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Gerar Proposta</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Função para formatar valores monetários
+        function formatMoney(value) {
+            return parseFloat(value).toFixed(2);
+        }
+        
+        // Função para calcular valores em tempo real
+        function calcularValores() {
+            // Obter valores dos campos
+            var consumo = parseFloat($('#consumo_indicado').val()) || 0;
+            var taxaConcessionaria = parseFloat($('#taxa_concessionaria').val()) || 0;
+            var taxaBandeira = parseFloat($('#taxa_bandeira').val()) || 0;
+            var percentualDesconto = parseFloat($('#percentual_desconto').val()) || 0;
+            
+            // Verificar se temos os valores mínimos necessários
+            if (consumo > 0 && taxaConcessionaria > 0 && percentualDesconto > 0) {
+                $.ajax({
+                    url: "{{ url_for('formulario.calcular') }}",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        consumo_indicado: consumo,
+                        taxa_concessionaria: taxaConcessionaria,
+                        taxa_bandeira: taxaBandeira,
+                        percentual_desconto: percentualDesconto
+                    }),
+                    success: function(data) {
+                        // Atualizar campos de exibição
+                        $('#pagar_energisa_display').val(formatMoney(data.pagar_energisa));
+                        $('#pagar_energisa_mais_bandeira_display').val(formatMoney(data.pagar_energisa_mais_bandeira));
+                        $('#pagar_enersim_display').val(formatMoney(data.pagar_enersim));
+                        $('#economia_display').val(formatMoney(data.economia));
+                        $('#economia_anual_display').val(formatMoney(data.economia_anual));
+                        $('#porcentagem_economia_display').val(formatMoney(data.porcentagem_economia));
+                        
+                        // Atualizar campos ocultos do formulário
+                        $('#pagar_energisa_hidden').val(data.pagar_energisa);
+                        $('#pagar_energisa_mais_bandeira_hidden').val(data.pagar_energisa_mais_bandeira);
+                        $('#pagar_enersim_hidden').val(data.pagar_enersim);
+                        $('#economia_hidden').val(data.economia);
+                        $('#economia_anual_hidden').val(data.economia_anual);
+                        $('#porcentagem_economia_hidden').val(data.porcentagem_economia);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Erro ao calcular valores:", error);
+                    }
+                });
+            }
+        }
+        
+        // Disparar cálculo quando os campos relevantes forem alterados
+        $('.calc-trigger').on('input change', function() {
+            calcularValores();
+        });
+        
+        // Inicializar máscaras para campos numéricos
+        $('#mes_atual').mask('00/0000');
+        
+        // Inicializar datepicker para mês/ano
+        $('#mes_atual').datepicker({
+            format: "mm/yyyy",
+            viewMode: "months", 
+            minViewMode: "months",
+            autoclose: true
+        });
+        
+        // Calcular valores iniciais se os campos já estiverem preenchidos
+        calcularValores();
+    });
+</script>
+{% endblock %}
