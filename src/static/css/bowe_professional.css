@@ -71,7 +71,6 @@ body {
   max-width: 800px;
   margin: 0 auto;
   background: var(--bowe-white);
-  border-radius: var(--bowe-radius-lg);
   box-shadow: var(--bowe-shadow-lg);
   overflow: hidden;
   position: relative;
@@ -522,11 +521,11 @@ body {
 }
 
 .value-comparison.savings {
-  color: var(--bowe-green);
+  color: var(--bowe-white);
 }
 
 .value-comparison.expensive {
-  color: var(--bowe-red);
+  color: var(--bowe-white);
 }
 
 /* Visual Indicators for Cards */
