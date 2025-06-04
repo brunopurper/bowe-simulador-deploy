@@ -110,8 +110,9 @@ def formulario(id_publico):
 
 @formulario_bp.route('/admin/formularios')
 def admin_formularios():
-    # Verificar autenticação de admin (simplificado)
-    if not request.cookies.get('admin_logged_in'):
+    # Verificar autenticação de admin usando a sessão (igual ao dashboard)
+    if 'logged_in' not in session:
+        flash('Acesso restrito. Por favor, faça login.', 'error')
         return redirect(url_for('dashboard.login'))
     
     # Buscar todos os formulários com suas propostas
@@ -121,8 +122,9 @@ def admin_formularios():
 
 @formulario_bp.route('/admin/formulario/<int:id>')
 def admin_formulario_detalhe(id):
-    # Verificar autenticação de admin (simplificado)
-    if not request.cookies.get('admin_logged_in'):
+    # Verificar autenticação de admin usando a sessão (igual ao dashboard)
+    if 'logged_in' not in session:
+        flash('Acesso restrito. Por favor, faça login.', 'error')
         return redirect(url_for('dashboard.login'))
     
     # Buscar o formulário pelo ID
@@ -132,8 +134,9 @@ def admin_formulario_detalhe(id):
 
 @formulario_bp.route('/uploads/<tipo>/<filename>')
 def view_file(tipo, filename):
-    # Verificar autenticação de admin (simplificado)
-    if not request.cookies.get('admin_logged_in'):
+    # Verificar autenticação de admin usando a sessão (igual ao dashboard)
+    if 'logged_in' not in session:
+        flash('Acesso restrito. Por favor, faça login.', 'error')
         return redirect(url_for('dashboard.login'))
     
     # Verificar se o tipo é válido
@@ -146,8 +149,9 @@ def view_file(tipo, filename):
 
 @formulario_bp.route('/download/<tipo>/<filename>')
 def download_file(tipo, filename):
-    # Verificar autenticação de admin (simplificado)
-    if not request.cookies.get('admin_logged_in'):
+    # Verificar autenticação de admin usando a sessão (igual ao dashboard)
+    if 'logged_in' not in session:
+        flash('Acesso restrito. Por favor, faça login.', 'error')
         return redirect(url_for('dashboard.login'))
     
     # Verificar se o tipo é válido
