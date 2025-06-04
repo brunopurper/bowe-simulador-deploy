@@ -16,6 +16,14 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'bowe-simulador-secret-key')
     
+    # Configuração para uploads de arquivos
+    app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
+    
+    # Criar diretórios de upload se não existirem
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'documentos'), exist_ok=True)
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'contas_luz'), exist_ok=True)
+    
     # Inicializar extensões
     db.init_app(app)
     

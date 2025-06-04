@@ -32,6 +32,12 @@ def resposta(id_publico):
     if resposta == 'aprovar':
         proposta.status = 'Aprovada'
         flash('Proposta aprovada com sucesso!', 'success')
+        
+        from src.models import db
+        db.session.commit()
+        
+        # Redirecionar para o formulário de continuidade após aprovação
+        return redirect(url_for('formulario.formulario', id_publico=id_publico))
     elif resposta == 'recusar':
         proposta.status = 'Recusada'
         flash('Proposta recusada.', 'info')

@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+
+{% block title %}Nova Proposta - Bowe Energia{% endblock %}
+
+{% block styles %}
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .form-title {
+        color: #2c3e50;
+        font-size: 28px;
+        margin-bottom: 10px;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    .form-subtitle {
+        color: #7f8c8d;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+    }
+    
+    .form-section-title {
+        color: #3498db;
+        font-size: 18px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #34495e;
+    }
+    
+    .required-field:after {
+        content: " *";
+        color: #e74c3c;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        transition: border 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: #3498db;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+    }
+    
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #2980b9, #3498db);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .help-text {
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+    
+    .input-group {
+        position: relative;
+    }
+    
+    .input-group-text {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Nova Proposta</h1>
+    <p class="form-subtitle">Preencha os dados abaixo para criar uma nova proposta</p>
+    
+    <form method="POST" action="{{ url_for('dashboard.nova_proposta') }}">
+        {{ form.csrf_token }}
+        
+        <!-- Dados do Cliente -->
+        <div class="form-section">
+            <h2 class="form-section-title"><i class="fas fa-user"></i> Dados do Cliente</h2>
+            
+            <div class="form-group">
+                <label for="nome_indicado" class="form-label required-field">Nome do Cliente</label>
+                {{ form.nome_indicado(class="form-control", placeholder="Nome completo do cliente") }}
+                {% if form.nome_indicado.errors %}
+                    <div class="text-danger">
+                        {% for error in form.nome_indicado.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="unidade_consumidora" class="form-label required-field">Unidade Consumidora</label>
+                {{ form.unidade_consumidora(class="form-control", placeholder="Número da unidade consumidora") }}
+                {% if form.unidade_consumidora.errors %}
+                    <div class="text-danger">
+                        {% for error in form.unidade_consumidora.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="help-text">Número que aparece na conta de luz</div>
+            </div>
+        </div>
+        
+        <!-- Dados de Consumo -->
+        <div class="form-section">
+            <h2 class="form-section-title"><i class="fas fa-bolt"></i> Dados de Consumo</h2>
+            
+            <div class="form-group">
+                <label for="consumo_indicado" class="form-label required-field">Consumo (kWh)</label>
+                <div class="input-group">
+                    {{ form.consumo_indicado(class="form-control", placeholder="Ex: 500") }}
+                    <span class="input-group-text">kWh</span>
+                </div>
+                {% if form.consumo_indicado.errors %}
+                    <div class="text-danger">
+                        {% for error in form.consumo_indicado.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="help-text">Consumo médio mensal em kWh</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="tipo_rede" class="form-label required-field">Tipo de Rede</label>
+                {{ form.tipo_rede(class="form-control") }}
+                {% if form.tipo_rede.errors %}
+                    <div class="text-danger">
+                        {% for error in form.tipo_rede.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="mes_atual" class="form-label required-field">Mês de Referência</label>
+                {{ form.mes_atual(class="form-control", placeholder="Ex: Junho/2025") }}
+                {% if form.mes_atual.errors %}
+                    <div class="text-danger">
+                        {% for error in form.mes_atual.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Dados de Tarifas -->
+        <div class="form-section">
+            <h2 class="form-section-title"><i class="fas fa-dollar-sign"></i> Dados de Tarifas</h2>
+            
+            <div class="form-group">
+                <label for="taxa_concessionaria" class="form-label required-field">Tarifa com Tributos (R$/kWh)</label>
+                <div class="input-group">
+                    {{ form.taxa_concessionaria(class="form-control", placeholder="Ex: 0.95") }}
+                    <span class="input-group-text">R$/kWh</span>
+                </div>
+                {% if form.taxa_concessionaria.errors %}
+                    <div class="text-danger">
+                        {% for error in form.taxa_concessionaria.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="help-text">Valor da tarifa da concessionária com impostos incluídos</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="taxa_bandeira" class="form-label">Taxa Bandeira (R$/kWh)</label>
+                <div class="input-group">
+                    {{ form.taxa_bandeira(class="form-control", placeholder="Ex: 0.04") }}
+                    <span class="input-group-text">R$/kWh</span>
+                </div>
+                {% if form.taxa_bandeira.errors %}
+                    <div class="text-danger">
+                        {% for error in form.taxa_bandeira.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="help-text">Valor adicional da bandeira tarifária (se houver)</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="percentual_desconto" class="form-label required-field">Percentual de Desconto</label>
+                {{ form.percentual_desconto(class="form-control") }}
+                {% if form.percentual_desconto.errors %}
+                    <div class="text-danger">
+                        {% for error in form.percentual_desconto.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="help-text">Percentual de desconto a ser aplicado na proposta</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="modelo_contrato" class="form-label">Modelo de Contrato</label>
+                {{ form.modelo_contrato(class="form-control", placeholder="Ex: Padrão Residencial") }}
+                {% if form.modelo_contrato.errors %}
+                    <div class="text-danger">
+                        {% for error in form.modelo_contrato.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="help-text">Modelo de contrato a ser utilizado</div>
+            </div>
+        </div>
+        
+        <!-- Campos ocultos -->
+        {{ form.nome_vendedor() }}
+        {{ form.telefone_vendedor() }}
+        {{ form.chave_pix() }}
+        {{ form.cidade_indicador() }}
+        {{ form.lider() }}
+        {{ form.cpf_indicador() }}
+        {{ form.telefone_indicado() }}
+        {{ form.email_indicado() }}
+        {{ form.pagar_energisa() }}
+        {{ form.pagar_energisa_mais_bandeira() }}
+        {{ form.pagar_enersim() }}
+        {{ form.economia() }}
+        {{ form.economia_anual() }}
+        {{ form.porcentagem_economia() }}
+        
+        <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> Gerar Proposta
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar datepicker para o mês de referência
+        $('.datepicker').datepicker({
+            format: 'mm/yyyy',
+            viewMode: 'months',
+            minViewMode: 'months',
+            language: 'pt-BR',
+            autoclose: true
+        });
+        
+        // Máscara para campos numéricos
+        $('.money').mask('0.00', {reverse: true});
+        
+        // Calcular valores automaticamente quando os campos mudam
+        function calcularValores() {
+            const consumo = parseFloat($('#consumo_indicado').val()) || 0;
+            const taxaConcessionaria = parseFloat($('#taxa_concessionaria').val()) || 0;
+            const taxaBandeira = parseFloat($('#taxa_bandeira').val()) || 0;
+            const percentualDesconto = parseFloat($('#percentual_desconto').val()) / 100 || 0;
+            
+            // Cálculos
+            const pagarEnergisa = consumo * taxaConcessionaria;
+            const pagarEnergisaMaisBandeira = pagarEnergisa + (consumo * taxaBandeira);
+            const pagarEnersim = pagarEnergisaMaisBandeira * (1 - percentualDesconto);
+            const economia = pagarEnergisaMaisBandeira - pagarEnersim;
+            const economiaAnual = economia * 12;
+            
+            // Atualizar campos ocultos
+            $('#pagar_energisa').val(pagarEnergisa.toFixed(2));
+            $('#pagar_energisa_mais_bandeira').val(pagarEnergisaMaisBandeira.toFixed(2));
+            $('#pagar_enersim').val(pagarEnersim.toFixed(2));
+            $('#economia').val(economia.toFixed(2));
+            $('#economia_anual').val(economiaAnual.toFixed(2));
+            $('#porcentagem_economia').val((percentualDesconto * 100).toFixed(2));
+        }
+        
+        // Calcular quando os campos mudam
+        $('#consumo_indicado, #taxa_concessionaria, #taxa_bandeira, #percentual_desconto').on('change keyup', calcularValores);
+        
+        // Calcular inicialmente
+        calcularValores();
+    });
+</script>
+{% endblock %}

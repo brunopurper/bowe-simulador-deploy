@@ -1,84 +1,159 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, session
-from src.models import db
+from flask import Blueprint, render_template, request, redirect, url_for, flash, abort, current_app, send_from_directory, session
+import os
+import uuid
+from werkzeug.utils import secure_filename
 from src.models.proposta import Proposta
-from src.routes.forms import PropostaForm
-from functools import wraps
+from src.models.formulario import FormularioCliente
+from src.models import db
 
 formulario_bp = Blueprint('formulario', __name__)
 
-# Decorator para verificar se o usuário está logado
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'logged_in' not in session:
-            flash('Acesso restrito. Por favor, faça login.', 'error')
-            return redirect(url_for('dashboard.login'))
-        return f(*args, **kwargs)
-    return decorated_function
+# Função para verificar extensões de arquivo permitidas
+def allowed_file(filename, allowed_extensions):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
-@formulario_bp.route('/', methods=['GET', 'POST'])
-@login_required
-def index():
-    form = PropostaForm()
-    
-    if request.method == 'POST' and form.validate_on_submit():
-        # Criar nova proposta com os dados do formulário
-        proposta = Proposta(
-            nome_vendedor=form.nome_vendedor.data,
-            telefone_vendedor=form.telefone_vendedor.data,
-            chave_pix=form.chave_pix.data,
-            cidade_indicador=form.cidade_indicador.data,
-            lider=form.lider.data,
-            cpf_indicador=form.cpf_indicador.data,
-            nome_indicado=form.nome_indicado.data,
-            telefone_indicado=form.telefone_indicado.data,
-            email_indicado=form.email_indicado.data,
-            unidade_consumidora=form.unidade_consumidora.data,
-            consumo_indicado=form.consumo_indicado.data,
-            tipo_rede=form.tipo_rede.data,
-            mes_atual=form.mes_atual.data,
-            taxa_concessionaria=form.taxa_concessionaria.data,
-            taxa_bandeira=form.taxa_bandeira.data or 0,
-            percentual_desconto=float(form.percentual_desconto.data),
-            modelo_contrato=form.modelo_contrato.data,
-            # Os campos calculados serão preenchidos automaticamente no modelo
-        )
+# Função para salvar arquivo com nome seguro
+def save_file(file, subfolder):
+    # Verificar se o arquivo existe
+    if not file:
+        return None
         
-        # Salvar no banco de dados
-        db.session.add(proposta)
-        db.session.commit()
-        
-        # Redirecionar para a página de compartilhamento da proposta
-        return redirect(url_for('proposta.compartilhar', id_publico=proposta.id_publico))
+    # Criar nome de arquivo seguro com UUID para evitar colisões
+    filename = secure_filename(file.filename)
+    unique_filename = f"{uuid.uuid4()}_{filename}"
     
-    return render_template('formulario.html', form=form)
+    # Definir caminho para salvar o arquivo
+    upload_folder = os.path.join(current_app.config['UPLOAD_FOLDER'], subfolder)
+    os.makedirs(upload_folder, exist_ok=True)
+    file_path = os.path.join(upload_folder, unique_filename)
+    
+    # Salvar o arquivo
+    file.save(file_path)
+    
+    return unique_filename
 
-@formulario_bp.route('/calcular', methods=['POST'])
-def calcular():
-    """Endpoint para cálculos em tempo real via AJAX"""
-    data = request.json
+@formulario_bp.route('/proposta/<id_publico>/formulario', methods=['GET', 'POST'])
+def formulario(id_publico):
+    # Buscar a proposta pelo ID público
+    proposta = Proposta.query.filter_by(id_publico=id_publico).first_or_404()
     
-    try:
-        consumo = float(data.get('consumo_indicado', 0))
-        taxa_concessionaria = float(data.get('taxa_concessionaria', 0))
-        taxa_bandeira = float(data.get('taxa_bandeira', 0))
-        percentual_desconto = float(data.get('percentual_desconto', 0))
+    # Verificar se a proposta foi aprovada
+    if proposta.status != 'Aprovada':
+        flash('Esta proposta ainda não foi aprovada.', 'warning')
+        return redirect(url_for('proposta.visualizar', id_publico=id_publico))
+    
+    # Verificar se o formulário já foi preenchido para esta proposta
+    formulario_existente = FormularioCliente.query.filter_by(proposta_id=proposta.id).first()
+    if formulario_existente:
+        flash('O formulário já foi preenchido para esta proposta.', 'info')
+        return redirect(url_for('proposta.visualizar', id_publico=id_publico))
+    
+    # Processar o formulário se for um POST
+    if request.method == 'POST':
+        # Validar campos obrigatórios
+        nome_completo = request.form.get('nome_completo')
+        telefone = request.form.get('telefone')
+        documento = request.files.get('documento')
+        conta_luz = request.files.get('conta_luz')
         
-        # Realizar cálculos
-        pagar_energisa = round(consumo * taxa_concessionaria, 2)
-        pagar_energisa_mais_bandeira = round(pagar_energisa + (consumo * taxa_bandeira), 2)
-        pagar_enersim = round(pagar_energisa_mais_bandeira * (1 - (percentual_desconto / 100)), 2)
-        economia = round(pagar_energisa_mais_bandeira - pagar_enersim, 2)
-        economia_anual = round(economia * 12, 2)
-        porcentagem_economia = percentual_desconto  # Usar diretamente o percentual de desconto
+        errors = []
         
-        return jsonify({
-            'pagar_energisa': pagar_energisa,
-            'pagar_energisa_mais_bandeira': pagar_energisa_mais_bandeira,
-            'pagar_enersim': pagar_enersim,
-            'economia': economia,
-            'economia_anual': economia_anual,
-            'porcentagem_economia': porcentagem_economia
-        })
-    except (ValueError, ZeroDivisionError):
-        return jsonify({'error': 'Erro nos cálculos. Verifique os valores informados.'}), 400
+        if not nome_completo:
+            errors.append('Nome completo é obrigatório.')
+        
+        if not telefone:
+            errors.append('Telefone é obrigatório.')
+        
+        if not documento:
+            errors.append('Documento com foto e CPF é obrigatório.')
+        elif not allowed_file(documento.filename, {'pdf', 'jpg', 'jpeg', 'png'}):
+            errors.append('Documento deve ser um arquivo PDF, JPG ou PNG.')
+        
+        if not conta_luz:
+            errors.append('Conta de luz atualizada é obrigatória.')
+        elif not allowed_file(conta_luz.filename, {'pdf', 'jpg', 'jpeg', 'png'}):
+            errors.append('Conta de luz deve ser um arquivo PDF, JPG ou PNG.')
+        
+        # Se houver erros, exibir mensagens e retornar ao formulário
+        if errors:
+            for error in errors:
+                flash(error, 'error')
+            return render_template('formulario.html', proposta=proposta)
+        
+        try:
+            # Salvar os arquivos
+            documento_filename = save_file(documento, 'documentos')
+            conta_luz_filename = save_file(conta_luz, 'contas_luz')
+            
+            # Criar novo registro no banco de dados
+            novo_formulario = FormularioCliente(
+                proposta_id=proposta.id,
+                nome_completo=nome_completo,
+                telefone=telefone,
+                documento_filename=documento_filename,
+                conta_luz_filename=conta_luz_filename
+            )
+            
+            db.session.add(novo_formulario)
+            db.session.commit()
+            
+            # Redirecionar para página de sucesso
+            return render_template('formulario_sucesso.html', proposta=proposta)
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao processar o formulário: {str(e)}', 'error')
+    
+    # Exibir o formulário para GET
+    return render_template('formulario.html', proposta=proposta)
+
+@formulario_bp.route('/admin/formularios')
+def admin_formularios():
+    # Verificar autenticação de admin (simplificado)
+    if not request.cookies.get('admin_logged_in'):
+        return redirect(url_for('dashboard.login'))
+    
+    # Buscar todos os formulários com suas propostas
+    formularios = FormularioCliente.query.order_by(FormularioCliente.data_submissao.desc()).all()
+    
+    return render_template('admin_formularios.html', formularios=formularios)
+
+@formulario_bp.route('/admin/formulario/<int:id>')
+def admin_formulario_detalhe(id):
+    # Verificar autenticação de admin (simplificado)
+    if not request.cookies.get('admin_logged_in'):
+        return redirect(url_for('dashboard.login'))
+    
+    # Buscar o formulário pelo ID
+    formulario = FormularioCliente.query.get_or_404(id)
+    
+    return render_template('admin_formulario_detalhe.html', formulario=formulario)
+
+@formulario_bp.route('/uploads/<tipo>/<filename>')
+def view_file(tipo, filename):
+    # Verificar autenticação de admin (simplificado)
+    if not request.cookies.get('admin_logged_in'):
+        return redirect(url_for('dashboard.login'))
+    
+    # Verificar se o tipo é válido
+    if tipo not in ['documentos', 'contas_luz']:
+        abort(404)
+    
+    # Retornar o arquivo usando send_from_directory
+    upload_folder = os.path.join(current_app.config['UPLOAD_FOLDER'], tipo)
+    return send_from_directory(upload_folder, filename)
+
+@formulario_bp.route('/download/<tipo>/<filename>')
+def download_file(tipo, filename):
+    # Verificar autenticação de admin (simplificado)
+    if not request.cookies.get('admin_logged_in'):
+        return redirect(url_for('dashboard.login'))
+    
+    # Verificar se o tipo é válido
+    if tipo not in ['documentos', 'contas_luz']:
+        abort(404)
+    
+    # Retornar o arquivo para download
+    upload_folder = os.path.join(current_app.config['UPLOAD_FOLDER'], tipo)
+    return send_from_directory(upload_folder, filename, as_attachment=True)

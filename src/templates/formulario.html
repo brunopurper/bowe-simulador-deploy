@@ -1,189 +1,317 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Simulador de Propostas - Bowe{% endblock %}
+{% block title %}Formulário de Continuidade - {{ proposta.nome_indicado }} - Bowe Energia{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bowe_professional.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .form-title {
+        color: #2c3e50;
+        font-size: 28px;
+        margin-bottom: 10px;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    .form-subtitle {
+        color: #7f8c8d;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+    }
+    
+    .form-section-title {
+        color: #3498db;
+        font-size: 18px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #34495e;
+    }
+    
+    .required-field:after {
+        content: " *";
+        color: #e74c3c;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        transition: border 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: #3498db;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .file-input-container {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    
+    .file-input-label {
+        display: block;
+        padding: 12px 15px;
+        background: #f1f5f9;
+        border: 1px dashed #3498db;
+        border-radius: 6px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .file-input-label:hover {
+        background: #e1edf7;
+    }
+    
+    .file-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .file-name {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #7f8c8d;
+    }
+    
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+    }
+    
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #2980b9, #3498db);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    /* Modal de erro */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 500px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        animation: modalFadeIn 0.3s;
+    }
+    
+    @keyframes modalFadeIn {
+        from {opacity: 0; transform: translateY(-30px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+    
+    .modal-header {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        position: relative;
+    }
+    
+    .modal-title {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+    .modal-error .modal-header {
+        border-bottom-color: #e74c3c;
+    }
+    
+    .modal-error .modal-title {
+        color: #e74c3c;
+    }
+    
+    .modal-body {
+        padding: 20px 0;
+    }
+    
+    .modal-footer {
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+        text-align: right;
+    }
+    
+    .close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .close:hover {
+        color: #555;
+    }
+    
+    .modal-btn {
+        padding: 8px 16px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .modal-btn:hover {
+        background-color: #2980b9;
+    }
+    
+    .error-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .error-item {
+        padding: 8px 0;
+        color: #e74c3c;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .error-item:last-child {
+        border-bottom: none;
+    }
+    
+    .error-icon {
+        margin-right: 8px;
+        color: #e74c3c;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12 text-center mb-4">
-            <h1>Simulador de Propostas</h1>
-            <h3>Bowe Energia</h3>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Nova Proposta</h4>
-                </div>
-                <div class="card-body">
-                    <form id="propostaForm" method="POST" action="{{ url_for('formulario.index') }}">
-                        {{ form.csrf_token }}
-                        
-                        <!-- Campos ocultos do vendedor -->
-                        {{ form.nome_vendedor() }}
-                        {{ form.telefone_vendedor() }}
-                        {{ form.chave_pix() }}
-                        {{ form.cidade_indicador() }}
-                        {{ form.lider() }}
-                        {{ form.cpf_indicador() }}
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <h5 class="border-bottom pb-2">Dados do Cliente</h5>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="nome_indicado">Nome do Cliente*</label>
-                                    {{ form.nome_indicado(class="form-control", placeholder="Nome da empresa/cliente") }}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="unidade_consumidora">Unidade Consumidora*</label>
-                                    {{ form.unidade_consumidora(class="form-control", placeholder="Número da UC") }}
-                                </div>
-                            </div>
-                            <!-- Campos ocultos do cliente -->
-                            {{ form.telefone_indicado() }}
-                            {{ form.email_indicado() }}
-                        </div>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <h5 class="border-bottom pb-2">Dados de Consumo</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="consumo_indicado">Consumo (kWh)*</label>
-                                    {{ form.consumo_indicado(class="form-control calc-trigger", placeholder="Consumo em kWh") }}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="tipo_rede">Tipo de Rede*</label>
-                                    {{ form.tipo_rede(class="form-control") }}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="mes_atual">Mês de Referência*</label>
-                                    {{ form.mes_atual(class="form-control", placeholder="Mês/Ano") }}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <h5 class="border-bottom pb-2">Dados de Tarifas</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="taxa_concessionaria">Tarifa com Tributos (R$/kWh)*</label>
-                                    {{ form.taxa_concessionaria(class="form-control calc-trigger", placeholder="0.000") }}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="taxa_bandeira">Taxa Bandeira (R$/kWh) (opcional)</label>
-                                    {{ form.taxa_bandeira(class="form-control calc-trigger", placeholder="0.00000") }}
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="percentual_desconto">Percentual de Desconto*</label>
-                                    {{ form.percentual_desconto(class="form-control calc-trigger") }}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <h5 class="border-bottom pb-2">Outros Dados</h5>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label for="modelo_contrato">Modelo de Contrato</label>
-                                    {{ form.modelo_contrato(class="form-control", placeholder="Modelo de contrato") }}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <h5 class="border-bottom pb-2">Resultados Calculados</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label>Valor a Pagar (Concessionária)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">R$</span>
-                                        <input type="text" id="pagar_energisa_display" class="form-control" readonly value="0.00">
-                                        {{ form.pagar_energisa(id="pagar_energisa_hidden") }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label>Valor a Pagar (Concessionária + Bandeira)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">R$</span>
-                                        <input type="text" id="pagar_energisa_mais_bandeira_display" class="form-control" readonly value="0.00">
-                                        {{ form.pagar_energisa_mais_bandeira(id="pagar_energisa_mais_bandeira_hidden") }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label>Valor a Pagar (Bowe)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">R$</span>
-                                        <input type="text" id="pagar_enersim_display" class="form-control" readonly value="0.00">
-                                        {{ form.pagar_enersim(id="pagar_enersim_hidden") }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label>Economia Mensal</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">R$</span>
-                                        <input type="text" id="economia_display" class="form-control" readonly value="0.00">
-                                        {{ form.economia(id="economia_hidden") }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label>Economia Anual</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">R$</span>
-                                        <input type="text" id="economia_anual_display" class="form-control" readonly value="0.00">
-                                        {{ form.economia_anual(id="economia_anual_hidden") }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label>Percentual de Economia</label>
-                                    <div class="input-group">
-                                        <input type="text" id="porcentagem_economia_display" class="form-control" readonly value="0.00">
-                                        <span class="input-group-text">%</span>
-                                        {{ form.porcentagem_economia(id="porcentagem_economia_hidden") }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-primary btn-lg">Gerar Proposta</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+<div class="form-container">
+    <h1 class="form-title">Complete seu cadastro</h1>
+    <p class="form-subtitle">Sua proposta foi aprovada! Preencha os dados abaixo para finalizar o processo.</p>
+    
+    <form action="{{ url_for('formulario.formulario', id_publico=proposta.id_publico) }}" method="POST" enctype="multipart/form-data" id="clienteForm">
+        <!-- Dados Pessoais -->
+        <div class="form-section">
+            <h2 class="form-section-title"><i class="fas fa-user"></i> Dados Pessoais</h2>
+            
+            <div class="form-group">
+                <label for="nome_completo" class="form-label required-field">Nome Completo</label>
+                <input type="text" id="nome_completo" name="nome_completo" class="form-control" value="{{ proposta.nome_indicado }}" required>
             </div>
+            
+            <div class="form-group">
+                <label for="telefone" class="form-label required-field">Telefone</label>
+                <input type="tel" id="telefone" name="telefone" class="form-control" value="{{ proposta.telefone_indicado or '' }}" placeholder="(00) 00000-0000" required>
+            </div>
+        </div>
+        
+        <!-- Documentos -->
+        <div class="form-section">
+            <h2 class="form-section-title"><i class="fas fa-file-upload"></i> Documentação</h2>
+            
+            <div class="form-group">
+                <label for="documento" class="form-label required-field">Documento com foto e CPF</label>
+                <div class="file-input-container">
+                    <label for="documento" class="file-input-label">
+                        <i class="fas fa-id-card"></i> Selecionar arquivo
+                    </label>
+                    <input type="file" id="documento" name="documento" class="file-input" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <div id="documento-name" class="file-name">Nenhum arquivo selecionado</div>
+                </div>
+                <small>Formatos aceitos: PDF, JPG, PNG (máx. 16MB)</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="conta_luz" class="form-label required-field">Conta de luz atualizada</label>
+                <div class="file-input-container">
+                    <label for="conta_luz" class="file-input-label">
+                        <i class="fas fa-file-invoice"></i> Selecionar arquivo
+                    </label>
+                    <input type="file" id="conta_luz" name="conta_luz" class="file-input" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <div id="conta_luz-name" class="file-name">Nenhum arquivo selecionado</div>
+                </div>
+                <small>Formatos aceitos: PDF, JPG, PNG (máx. 16MB)</small>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> Enviar Documentação
+        </button>
+    </form>
+</div>
+
+<!-- Modal de Erro -->
+<div id="errorModal" class="modal modal-error">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title"><i class="fas fa-exclamation-circle"></i> Erro no Formulário</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ul class="error-list" id="errorList">
+                <!-- Erros serão inseridos aqui via JavaScript -->
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn" id="errorModalClose">Entendi</button>
         </div>
     </div>
 </div>
@@ -191,74 +319,92 @@
 
 {% block scripts %}
 <script>
-    $(document).ready(function() {
-        // Função para formatar valores monetários
-        function formatMoney(value) {
-            return parseFloat(value).toFixed(2);
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Atualizar nome do arquivo selecionado
+        document.getElementById('documento').addEventListener('change', function() {
+            const fileName = this.files[0] ? this.files[0].name : 'Nenhum arquivo selecionado';
+            document.getElementById('documento-name').textContent = fileName;
+        });
         
-        // Função para calcular valores em tempo real
-        function calcularValores() {
-            // Obter valores dos campos
-            var consumo = parseFloat($('#consumo_indicado').val()) || 0;
-            var taxaConcessionaria = parseFloat($('#taxa_concessionaria').val()) || 0;
-            var taxaBandeira = parseFloat($('#taxa_bandeira').val()) || 0;
-            var percentualDesconto = parseFloat($('#percentual_desconto').val()) || 0;
+        document.getElementById('conta_luz').addEventListener('change', function() {
+            const fileName = this.files[0] ? this.files[0].name : 'Nenhum arquivo selecionado';
+            document.getElementById('conta_luz-name').textContent = fileName;
+        });
+        
+        // Validação do formulário
+        const form = document.getElementById('clienteForm');
+        form.addEventListener('submit', function(event) {
+            let errors = [];
             
-            // Verificar se temos os valores mínimos necessários
-            if (consumo > 0 && taxaConcessionaria > 0 && percentualDesconto > 0) {
-                $.ajax({
-                    url: "{{ url_for('formulario.calcular') }}",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        consumo_indicado: consumo,
-                        taxa_concessionaria: taxaConcessionaria,
-                        taxa_bandeira: taxaBandeira,
-                        percentual_desconto: percentualDesconto
-                    }),
-                    success: function(data) {
-                        // Atualizar campos de exibição
-                        $('#pagar_energisa_display').val(formatMoney(data.pagar_energisa));
-                        $('#pagar_energisa_mais_bandeira_display').val(formatMoney(data.pagar_energisa_mais_bandeira));
-                        $('#pagar_enersim_display').val(formatMoney(data.pagar_enersim));
-                        $('#economia_display').val(formatMoney(data.economia));
-                        $('#economia_anual_display').val(formatMoney(data.economia_anual));
-                        $('#porcentagem_economia_display').val(formatMoney(data.porcentagem_economia));
-                        
-                        // Atualizar campos ocultos do formulário
-                        $('#pagar_energisa_hidden').val(data.pagar_energisa);
-                        $('#pagar_energisa_mais_bandeira_hidden').val(data.pagar_energisa_mais_bandeira);
-                        $('#pagar_enersim_hidden').val(data.pagar_enersim);
-                        $('#economia_hidden').val(data.economia);
-                        $('#economia_anual_hidden').val(data.economia_anual);
-                        $('#porcentagem_economia_hidden').val(data.porcentagem_economia);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Erro ao calcular valores:", error);
-                    }
-                });
+            // Validar nome completo
+            const nomeCompleto = document.getElementById('nome_completo').value.trim();
+            if (!nomeCompleto) {
+                errors.push('Nome completo é obrigatório');
             }
+            
+            // Validar telefone
+            const telefone = document.getElementById('telefone').value.trim();
+            if (!telefone) {
+                errors.push('Telefone é obrigatório');
+            }
+            
+            // Validar documento
+            const documento = document.getElementById('documento').files;
+            if (!documento || documento.length === 0) {
+                errors.push('Documento com foto e CPF é obrigatório');
+            }
+            
+            // Validar conta de luz
+            const contaLuz = document.getElementById('conta_luz').files;
+            if (!contaLuz || contaLuz.length === 0) {
+                errors.push('Conta de luz atualizada é obrigatória');
+            }
+            
+            // Se houver erros, mostrar modal e impedir envio
+            if (errors.length > 0) {
+                event.preventDefault();
+                showErrorModal(errors);
+            }
+        });
+        
+        // Função para mostrar modal de erro
+        function showErrorModal(errors) {
+            const errorList = document.getElementById('errorList');
+            errorList.innerHTML = '';
+            
+            errors.forEach(function(error) {
+                const li = document.createElement('li');
+                li.className = 'error-item';
+                li.innerHTML = `<i class="fas fa-exclamation-circle error-icon"></i> ${error}`;
+                errorList.appendChild(li);
+            });
+            
+            document.getElementById('errorModal').style.display = 'block';
         }
         
-        // Disparar cálculo quando os campos relevantes forem alterados
-        $('.calc-trigger').on('input change', function() {
-            calcularValores();
+        // Fechar modal ao clicar no X ou no botão
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('errorModal').style.display = 'none';
         });
         
-        // Inicializar máscaras para campos numéricos
-        $('#mes_atual').mask('00/0000');
-        
-        // Inicializar datepicker para mês/ano
-        $('#mes_atual').datepicker({
-            format: "mm/yyyy",
-            viewMode: "months", 
-            minViewMode: "months",
-            autoclose: true
+        document.getElementById('errorModalClose').addEventListener('click', function() {
+            document.getElementById('errorModal').style.display = 'none';
         });
         
-        // Calcular valores iniciais se os campos já estiverem preenchidos
-        calcularValores();
+        // Fechar modal ao clicar fora dele
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('errorModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Mostrar erros do Flask se houver
+        {% with messages = get_flashed_messages(category_filter=["error"]) %}
+            {% if messages %}
+                showErrorModal([{% for message in messages %}"{{ message }}"{% if not loop.last %}, {% endif %}{% endfor %}]);
+            {% endif %}
+        {% endwith %}
     });
 </script>
 {% endblock %}

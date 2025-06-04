@@ -1,5 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from functools import wraps
+from src.models.proposta import Proposta
+from src.routes.forms import PropostaForm
+import uuid
+from datetime import datetime
+import pytz
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
@@ -83,6 +88,67 @@ def index():
                           propostas_pendentes=propostas_pendentes,
                           meses=meses,
                           dados_mensais=dados_mensais)
+
+@dashboard_bp.route('/nova-proposta', methods=['GET', 'POST'])
+@login_required
+def nova_proposta():
+    form = PropostaForm()
+    
+    if form.validate_on_submit():
+        # Gerar um ID público único para a proposta
+        id_publico = str(uuid.uuid4())
+        
+        # Calcular valores com base nos dados do formulário
+        consumo = float(form.consumo_indicado.data)
+        taxa_concessionaria = float(form.taxa_concessionaria.data)
+        taxa_bandeira = float(form.taxa_bandeira.data or 0)
+        percentual_desconto = float(form.percentual_desconto.data) / 100
+        
+        # Cálculos
+        pagar_energisa = consumo * taxa_concessionaria
+        pagar_energisa_mais_bandeira = pagar_energisa + (consumo * taxa_bandeira)
+        pagar_enersim = pagar_energisa_mais_bandeira * (1 - percentual_desconto)
+        economia = pagar_energisa_mais_bandeira - pagar_enersim
+        economia_anual = economia * 12
+        
+        # Criar nova proposta
+        nova_proposta = Proposta(
+            id_publico=id_publico,
+            nome_vendedor=form.nome_vendedor.data,
+            telefone_vendedor=form.telefone_vendedor.data,
+            chave_pix=form.chave_pix.data,
+            cidade_indicador=form.cidade_indicador.data,
+            lider=form.lider.data,
+            cpf_indicador=form.cpf_indicador.data,
+            nome_indicado=form.nome_indicado.data,
+            telefone_indicado=form.telefone_indicado.data,
+            email_indicado=form.email_indicado.data,
+            unidade_consumidora=form.unidade_consumidora.data,
+            consumo_indicado=consumo,
+            tipo_rede=form.tipo_rede.data,
+            mes_atual=form.mes_atual.data,
+            taxa_concessionaria=taxa_concessionaria,
+            taxa_bandeira=taxa_bandeira,
+            percentual_desconto=percentual_desconto * 100,
+            modelo_contrato=form.modelo_contrato.data,
+            pagar_energisa=pagar_energisa,
+            pagar_energisa_mais_bandeira=pagar_energisa_mais_bandeira,
+            pagar_enersim=pagar_enersim,
+            economia=economia,
+            economia_anual=economia_anual,
+            status='Pendente',
+            data_criacao=datetime.now(pytz.UTC)
+        )
+        
+        # Salvar no banco de dados
+        from src.models import db
+        db.session.add(nova_proposta)
+        db.session.commit()
+        
+        flash('Proposta criada com sucesso!', 'success')
+        return redirect(url_for('proposta.visualizar', id_publico=id_publico))
+    
+    return render_template('nova_proposta.html', form=form)
 
 @dashboard_bp.route('/excluir-proposta/<int:id>', methods=['POST'])
 @login_required

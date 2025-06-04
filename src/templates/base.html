@@ -23,7 +23,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('formulario.index') }}">
+            <a class="navbar-brand" href="{{ url_for('dashboard.index') }}">
                 <strong>Bowe</strong> Simulador
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -33,10 +33,19 @@
                 <ul class="navbar-nav ms-auto">
                     {% if session.get('logged_in') %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('formulario.index') }}">Nova Proposta</a>
+                        <a class="nav-link" href="{{ url_for('dashboard.nova_proposta') }}">
+                            <i class="fas fa-plus-circle"></i> Nova Proposta
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ url_for('dashboard.index') }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('formulario.admin_formularios') }}">
+                            <i class="fas fa-file-alt"></i> Formulários
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dashboard.logout') }}">

@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Formulário Enviado com Sucesso - Bowe Energia{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bowe_professional.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .success-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .success-icon {
+        font-size: 80px;
+        color: #2ecc71;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    
+    .success-title {
+        color: #2c3e50;
+        font-size: 28px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .success-message {
+        color: #7f8c8d;
+        font-size: 18px;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+    
+    .proposal-summary {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        text-align: left;
+    }
+    
+    .summary-title {
+        color: #3498db;
+        font-size: 18px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .summary-item {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .summary-label {
+        font-weight: 500;
+        color: #34495e;
+    }
+    
+    .summary-value {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    
+    .highlight {
+        color: #2ecc71;
+    }
+    
+    .btn-return {
+        display: inline-block;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+    
+    .btn-return:hover {
+        background: linear-gradient(135deg, #2980b9, #3498db);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    /* Confetes */
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f2d74e;
+        opacity: 0.7;
+        top: -10px;
+        animation: confetti-fall linear forwards;
+    }
+    
+    @keyframes confetti-fall {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0.7;
+        }
+        100% {
+            transform: translateY(1000px) rotate(720deg);
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="success-container" id="successContainer">
+    <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+    </div>
+    
+    <h1 class="success-title">Formulário enviado com sucesso!</h1>
+    
+    <p class="success-message">
+        Agradecemos pelo envio dos seus dados e documentos. Um de nossos operadores entrará em contato em breve para dar continuidade ao seu processo de desconto.
+    </p>
+    
+    <div class="proposal-summary">
+        <h2 class="summary-title"><i class="fas fa-file-alt"></i> Resumo da sua proposta</h2>
+        
+        <div class="summary-item">
+            <span class="summary-label">Nome:</span>
+            <span class="summary-value">{{ proposta.nome_indicado }}</span>
+        </div>
+        
+        <div class="summary-item">
+            <span class="summary-label">Unidade Consumidora:</span>
+            <span class="summary-value">{{ proposta.unidade_consumidora }}</span>
+        </div>
+        
+        <div class="summary-item">
+            <span class="summary-label">Consumo:</span>
+            <span class="summary-value">{{ "{:,.0f}".format(proposta.consumo_indicado|int).replace(',', '.') }} kWh</span>
+        </div>
+        
+        <div class="summary-item">
+            <span class="summary-label">Economia Mensal:</span>
+            <span class="summary-value highlight">R$ {{ "{:,.2f}".format(proposta.economia).replace(',', '.').replace('.', ',') }}</span>
+        </div>
+        
+        <div class="summary-item">
+            <span class="summary-label">Economia Anual:</span>
+            <span class="summary-value highlight">R$ {{ "{:,.2f}".format(proposta.economia_anual).replace(',', '.').replace('.', ',') }}</span>
+        </div>
+    </div>
+    
+    <a href="{{ url_for('proposta.visualizar', id_publico=proposta.id_publico) }}" class="btn-return">
+        <i class="fas fa-arrow-left"></i> Voltar para a proposta
+    </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Criar e animar confetes
+        const container = document.getElementById('successContainer');
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        
+        const colors = ['#f2d74e', '#95c3de', '#ff9a9a', '#a0db8e', '#da9ff9'];
+        
+        // Criar 100 confetes
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            
+            // Posição aleatória
+            const posX = Math.random() * containerWidth;
+            confetti.style.left = posX + 'px';
+            
+            // Cor aleatória
+            const colorIndex = Math.floor(Math.random() * colors.length);
+            confetti.style.backgroundColor = colors[colorIndex];
+            
+            // Tamanho aleatório
+            const size = Math.random() * 10 + 5;
+            confetti.style.width = size + 'px';
+            confetti.style.height = size + 'px';
+            
+            // Forma aleatória
+            const shapes = ['circle', 'square', 'triangle'];
+            const shapeIndex = Math.floor(Math.random() * shapes.length);
+            if (shapes[shapeIndex] === 'circle') {
+                confetti.style.borderRadius = '50%';
+            } else if (shapes[shapeIndex] === 'triangle') {
+                confetti.style.width = '0';
+                confetti.style.height = '0';
+                confetti.style.borderLeft = size/2 + 'px solid transparent';
+                confetti.style.borderRight = size/2 + 'px solid transparent';
+                confetti.style.borderBottom = size + 'px solid ' + colors[colorIndex];
+                confetti.style.backgroundColor = 'transparent';
+            }
+            
+            // Duração aleatória
+            const duration = Math.random() * 3 + 2;
+            confetti.style.animationDuration = duration + 's';
+            
+            // Atraso aleatório
+            const delay = Math.random() * 5;
+            confetti.style.animationDelay = delay + 's';
+            
+            container.appendChild(confetti);
+        }
+    });
+</script>
+{% endblock %}
