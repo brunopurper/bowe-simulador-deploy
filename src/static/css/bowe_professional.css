@@ -1,0 +1,555 @@
+/* Bowe Advanced Sales Psychology CSS */
+
+/* Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* Base Variables */
+:root {
+  /* Core Brand Colors */
+  --bowe-blue-dark: #1a3a5f;
+  --bowe-blue: #0d47a1;
+  --bowe-blue-light: #2196f3;
+  --bowe-purple: #7e57c2;
+  --bowe-pink: #e91e63;
+  --bowe-orange: #ff7043;
+  --bowe-green: #00c853;
+  --bowe-green-dark: #00853f;
+  --bowe-yellow: #ffc107;
+  --bowe-red: #d32f2f;
+  --bowe-red-dark: #b71c1c;
+  
+  /* Neutral Colors */
+  --bowe-white: #ffffff;
+  --bowe-gray-lightest: #f8f9fa;
+  --bowe-gray-light: #f1f3f5;
+  --bowe-gray: #e9ecef;
+  --bowe-gray-medium: #adb5bd;
+  --bowe-gray-dark: #495057;
+  --bowe-black: #212529;
+  
+  /* Functional Colors */
+  --bowe-text-primary: #212529;
+  --bowe-text-secondary: #495057;
+  --bowe-text-light: #ffffff;
+  
+  /* Gradients */
+  --bowe-gradient-header: linear-gradient(120deg, var(--bowe-blue-dark) 0%, var(--bowe-purple) 100%);
+  --bowe-gradient-success: linear-gradient(120deg, var(--bowe-green) 0%, var(--bowe-green-dark) 100%);
+  --bowe-gradient-danger: linear-gradient(120deg, var(--bowe-red) 0%, var(--bowe-red-dark) 100%);
+  --bowe-gradient-warning: linear-gradient(120deg, var(--bowe-orange) 0%, var(--bowe-yellow) 100%);
+  --bowe-gradient-neutral: linear-gradient(120deg, var(--bowe-gray-medium) 0%, var(--bowe-gray-dark) 100%);
+  --bowe-gradient-premium: linear-gradient(120deg, var(--bowe-blue) 0%, var(--bowe-blue-dark) 100%);
+  --bowe-gradient-economy: linear-gradient(120deg, #00c853 0%, #009688 100%);
+  
+  /* Effects */
+  --bowe-shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --bowe-shadow: 0 4px 6px rgba(0,0,0,0.07);
+  --bowe-shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --bowe-radius-sm: 6px;
+  --bowe-radius: 8px;
+  --bowe-radius-lg: 12px;
+  --bowe-radius-xl: 20px;
+  
+  /* Transitions */
+  --bowe-transition: all 0.3s ease;
+}
+
+/* Global Styles */
+body {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--bowe-text-primary);
+  background-color: var(--bowe-gray-lightest);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container */
+.proposal-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--bowe-white);
+  border-radius: var(--bowe-radius-lg);
+  box-shadow: var(--bowe-shadow-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Header */
+.header {
+  background: var(--bowe-gradient-header);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  transform: rotate(30deg);
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.logo-icon {
+  width: 8rem;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--bowe-white);
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+
+/* Content Area */
+.proposal-content {
+  padding: 1.5rem;
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--bowe-blue-dark);
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--bowe-gray);
+}
+
+.section-title i {
+  margin-right: 0.75rem;
+  color: var(--bowe-blue);
+  font-size: 1.2rem;
+}
+
+/* Client Info Section */
+.client-info {
+  background: var(--bowe-gray-light);
+  border-radius: var(--bowe-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  box-shadow: var(--bowe-shadow-sm);
+}
+
+.client-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: var(--bowe-blue);
+  border-radius: var(--bowe-radius) 0 0 var(--bowe-radius);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--bowe-gray-dark);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--bowe-text-primary);
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--bowe-radius-xl);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pendente {
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1px solid #ffecb3;
+}
+
+.status-aprovada {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.status-recusada {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+/* Financial Analysis Section */
+.financial-analysis {
+  margin-bottom: 1.5rem;
+}
+
+.financial-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* Card Styles with Advanced Sales Psychology */
+.financial-card {
+  border-radius: var(--bowe-radius);
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  transition: var(--bowe-transition);
+  box-shadow: var(--bowe-shadow);
+}
+
+/* Current Value Card - Red to create urgency and pain point awareness */
+.financial-card.current {
+  background: var(--bowe-gradient-danger);
+  color: var(--bowe-white);
+}
+
+/* Neutral Card - Subtle, less emphasis */
+.financial-card.neutral {
+  background: var(--bowe-white);
+  border: 1px solid var(--bowe-gray);
+  color: var(--bowe-text-primary);
+}
+
+/* Total Current Card - Blue-gray to show importance but not as urgent as the solution */
+.financial-card.total {
+  background: var(--bowe-gradient-premium);
+  color: var(--bowe-white);
+}
+
+/* Bowe Value Card - Green to represent solution and savings */
+.financial-card.highlight {
+  background: var(--bowe-gradient-success);
+  color: var(--bowe-white);
+  transform: scale(1.02);
+  box-shadow: var(--bowe-shadow-lg);
+  z-index: 1;
+}
+
+.financial-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--bowe-shadow-lg);
+}
+
+.financial-card.highlight:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.card-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+}
+
+.card-title i {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* Economy Highlight - Special treatment for the key selling point */
+.economy-highlight {
+  background: var(--bowe-gradient-economy);
+  color: var(--bowe-white);
+  padding: 1.5rem;
+  border-radius: var(--bowe-radius);
+  text-align: center;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--bowe-shadow-lg);
+  transform: scale(1.03);
+}
+
+.economy-highlight::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  z-index: 1;
+}
+
+.economy-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: rgba(255,255,255,0.3);
+  z-index: 1;
+}
+
+.economy-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+}
+
+.economy-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.economy-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  position: relative;
+  z-index: 2;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--bowe-radius-xl);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--bowe-transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: var(--bowe-shadow);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+  transition: all 0.6s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: var(--bowe-blue);
+  color: var(--bowe-white);
+}
+
+.btn-success {
+  background: var(--bowe-green);
+  color: var(--bowe-white);
+}
+
+.btn-danger {
+  background: var(--bowe-pink);
+  color: var(--bowe-white);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--bowe-shadow-lg);
+}
+
+/* Footer */
+.footer {
+  background: var(--bowe-gradient-header);
+  color: var(--bowe-gray-light);
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.footer p {
+  margin: 0.3rem 0;
+  opacity: 0.8;
+}
+
+.footer-logo {
+  width: 60px;
+  margin: 0 auto 0.5rem;
+  opacity: 0.7;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  .proposal-container {
+    margin: 2rem auto;
+  }
+  
+  .header {
+    padding: 2.5rem;
+  }
+  
+  .proposal-content {
+    padding: 2rem;
+  }
+  
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    width: auto;
+    min-width: 180px;
+  }
+  
+  .card-value {
+    font-size: 2rem;
+  }
+  
+  .economy-value {
+    font-size: 3rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .proposal-container {
+    box-shadow: none;
+    margin: 0;
+  }
+  
+  .btn {
+    display: none;
+  }
+}
+
+/* Value Comparison Indicator */
+.value-comparison {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.value-comparison i {
+  margin-right: 0.5rem;
+}
+
+.value-comparison.savings {
+  color: var(--bowe-green);
+}
+
+.value-comparison.expensive {
+  color: var(--bowe-red);
+}
+
+/* Visual Indicators for Cards */
+.card-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+/* Trust Badges */
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255,255,255,0.2);
+  border-radius: var(--bowe-radius-sm);
+  font-size: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.trust-badge i {
+  margin-right: 0.25rem;
+  font-size: 0.8rem;
+}

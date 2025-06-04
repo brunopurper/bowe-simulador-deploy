@@ -1,346 +1,358 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Bowe Professional Corporate Identity CSS */
+
+/* Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* Base Variables */
+:root {
+  --bowe-blue-dark: #1a3a5f;
+  --bowe-blue: #0d47a1;
+  --bowe-blue-light: #2196f3;
+  --bowe-purple: #7e57c2;
+  --bowe-pink: #e91e63;
+  --bowe-green: #00c853;
+  --bowe-yellow: #ffd54f;
+  --bowe-gray-light: #f5f5f5;
+  --bowe-gray: #e0e0e0;
+  --bowe-gray-medium: #9e9e9e;
+  --bowe-gray-dark: #424242;
+  --bowe-text: #333333;
+  --bowe-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  --bowe-radius: 8px;
+  --bowe-header-gradient: linear-gradient(90deg, var(--bowe-blue-dark) 0%, var(--bowe-purple) 100%);
+  --bowe-success-gradient: linear-gradient(90deg, #00c853 0%, #00acc1 100%);
+  --bowe-danger-gradient: linear-gradient(90deg, #e91e63 0%, #d81b60 100%);
 }
 
+/* Global Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */ /* Let base.html control body background if needed */
-    /* min-height: 100vh; */
-    /* padding: 20px; */ /* Padding might be better on the container or specific sections */
+  font-family: 'Montserrat', sans-serif;
+  color: var(--bowe-text);
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
 }
 
-/* Container for the proposal content */
+/* Container */
 .proposal-container {
-    max-width: 900px;
-    margin: 2rem auto; /* Add margin for spacing */
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--bowe-shadow);
+  overflow: hidden;
 }
 
+/* Header */
 .header {
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-    color: white;
-    padding: 30px;
-    text-align: center;
-    position: relative;
+  background: var(--bowe-header-gradient);
+  color: white;
+  padding: 30px 40px;
+  text-align: center;
+  position: relative;
 }
 
-.header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.3;
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.logo {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: auto;
+  margin-right: 15px;
+}
+
+.logo-text {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
 }
 
 .subtitle {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    position: relative;
-    z-index: 1;
+  font-size: 1.1rem;
+  font-weight: 400;
+  opacity: 0.9;
 }
 
+/* Content Area */
 .proposal-content {
-    padding: 40px;
+  padding: 30px 40px;
 }
 
+/* Section Styles */
+.section {
+  margin-bottom: 30px;
+  background: white;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--bowe-blue-dark);
+  margin-bottom: 20px;
+}
+
+.section-title i {
+  margin-right: 10px;
+  color: var(--bowe-blue);
+}
+
+/* Client Info Section */
 .client-info {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    border-left: 5px solid #3498db;
+  background: var(--bowe-gray-light);
+  border-radius: var(--bowe-radius);
+  padding: 25px;
+  margin-bottom: 30px;
+  position: relative;
 }
 
-.client-info h2 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.client-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: var(--bowe-blue);
+  border-radius: var(--bowe-radius) 0 0 var(--bowe-radius);
 }
 
 .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 .info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .info-label {
-    font-weight: 600;
-    color: #6c757d;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--bowe-gray-medium);
+  font-weight: 600;
+  margin-bottom: 5px;
+  letter-spacing: 0.5px;
 }
 
 .info-value {
-    font-size: 1.1rem;
-    color: #2c3e50;
-    font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--bowe-text);
 }
 
-.calculations {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    margin-bottom: 30px;
-}
-
-.calculations h2 {
-    color: #2c3e50;
-    margin-bottom: 25px;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.calc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.calc-card {
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    padding: 20px;
-    border-radius: 12px;
-    border: 2px solid #e9ecef;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.calc-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-.calc-card.highlight {
-    border-color: #28a745;
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-}
-
-.calc-card.danger {
-    border-color: #dc3545;
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-}
-
-.calc-title {
-    font-size: 0.9rem;
-    color: #6c757d;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-}
-
-.calc-value {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.calc-card.highlight .calc-value {
-    color: #155724;
-}
-
-.calc-card.danger .calc-value {
-    color: #721c24;
-}
-
-.economy-highlight {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    padding: 25px;
-    border-radius: 15px;
-    text-align: center;
-    margin: 30px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.economy-highlight::before {
-    content: '💰';
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    font-size: 4rem;
-    opacity: 0.2;
-}
-
-.economy-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    opacity: 0.9;
-}
-
-.economy-value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.economy-subtitle {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 30px;
-    padding: 25px;
-    background: #f8f9fa;
-    border-radius: 15px;
-}
-
-.btn {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 25px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 150px;
-    justify-content: center;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-}
-
-.btn-success {
-    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-    color: white;
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    color: white;
-}
-
-.btn-info {
-    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
-    color: white;
-}
-
-.btn-warning {
-    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
-    color: #212529;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
+/* Status Badge */
 .status-badge {
-    display: inline-block;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .status-pendente {
-    background: #fff3cd;
-    color: #856404;
-    border: 2px solid #ffeaa7;
+  background: var(--bowe-yellow);
+  color: #856404;
 }
-/* Add other status styles if needed */
+
 .status-aprovada {
-    background: #d4edda;
-    color: #155724;
-    border: 2px solid #c3e6cb;
+  background: var(--bowe-green);
+  color: white;
 }
+
 .status-recusada {
-    background: #f8d7da;
-    color: #721c24;
-    border: 2px solid #f5c6cb;
+  background: var(--bowe-pink);
+  color: white;
 }
 
+/* Financial Analysis Section */
+.financial-analysis {
+  margin-bottom: 30px;
+}
+
+.financial-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.financial-card {
+  border-radius: var(--bowe-radius);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.financial-card.current {
+  background: var(--bowe-danger-gradient);
+  color: white;
+}
+
+.financial-card.neutral {
+  background: white;
+  border: 1px solid var(--bowe-gray);
+  color: var(--bowe-text);
+}
+
+.financial-card.highlight {
+  background: var(--bowe-success-gradient);
+  color: white;
+}
+
+.card-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Economy Highlight */
+.economy-highlight {
+  background: var(--bowe-success-gradient);
+  color: white;
+  padding: 25px;
+  border-radius: var(--bowe-radius);
+  text-align: center;
+  margin: 30px 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--bowe-shadow);
+}
+
+.economy-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.economy-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.economy-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 150px;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background: var(--bowe-blue);
+  color: white;
+}
+
+.btn-success {
+  background: var(--bowe-green);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--bowe-pink);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Footer */
 .footer {
-    background: #2c3e50;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 0.9rem;
+  background: var(--bowe-gray-light);
+  color: var(--bowe-gray-dark);
+  padding: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--bowe-gray);
 }
 
+.footer p {
+  margin: 5px 0;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .proposal-container {
-        margin: 10px;
-        border-radius: 15px;
-    }
-    
-    .proposal-content {
-        padding: 20px;
-    }
-    
-    .actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .btn {
-        width: 100%;
-    }
-    
-    .calc-grid {
-        grid-template-columns: 1fr;
-    }
+  .proposal-container {
+    margin: 10px;
+    border-radius: 8px;
+  }
+  
+  .header {
+    padding: 20px;
+  }
+  
+  .logo-text {
+    font-size: 1.8rem;
+  }
+  
+  .proposal-content {
+    padding: 20px;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn {
+    width: 100%;
+  }
 }
-
-/* Remove print styles as WeasyPrint will handle PDF rendering */
-/* @media print { ... } */
-
-/* Animações - Keep or remove based on preference/performance */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.calc-card {
-    /* animation: fadeIn 0.6s ease forwards; */ /* Optional: Disable if causing issues */
-}
-
-/* .calc-card:nth-child(1) { animation-delay: 0.1s; } */
-/* .calc-card:nth-child(2) { animation-delay: 0.2s; } */
-/* .calc-card:nth-child(3) { animation-delay: 0.3s; } */
-/* .calc-card:nth-child(4) { animation-delay: 0.4s; } */
-
