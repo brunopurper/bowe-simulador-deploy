@@ -1,17 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from functools import wraps
-from src.models.proposta import Proposta
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, abort
 from src.routes.forms import PropostaForm
-import uuid
+from src.models.proposta import Proposta
 from datetime import datetime
+import uuid
 import pytz
-
+from functools import wraps
 dashboard_bp = Blueprint('dashboard', __name__)
-
-# Credenciais de login (em produção, isso deveria estar em um banco de dados)
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "bowe2025"
-
 # Decorator para verificar se o usuário está logado
 def login_required(f):
     @wraps(f)
@@ -21,28 +15,26 @@ def login_required(f):
             return redirect(url_for('dashboard.login'))
         return f(*args, **kwargs)
     return decorated_function
-
 @dashboard_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        # Credenciais fixas para demonstração
+        if username == 'admin' and password == 'bowe2025':
             session['logged_in'] = True
             flash('Login realizado com sucesso!', 'success')
             return redirect(url_for('dashboard.index'))
         else:
-            flash('Usuário ou senha incorretos.', 'error')
+            flash('Credenciais inválidas. Tente novamente.', 'error')
     
     return render_template('login.html')
-
 @dashboard_bp.route('/logout')
 def logout():
     session.pop('logged_in', None)
     flash('Você saiu do sistema.', 'info')
     return redirect(url_for('dashboard.login'))
-
 @dashboard_bp.route('/dashboard')
 @login_required
 def index():
@@ -88,7 +80,6 @@ def index():
                           propostas_pendentes=propostas_pendentes,
                           meses=meses,
                           dados_mensais=dados_mensais)
-
 @dashboard_bp.route('/nova-proposta', methods=['GET', 'POST'])
 @login_required
 def nova_proposta():
@@ -146,10 +137,10 @@ def nova_proposta():
         db.session.commit()
         
         flash('Proposta criada com sucesso!', 'success')
-        return redirect(url_for('proposta.visualizar', id_publico=id_publico))
+        # Redirecionar para a página de compartilhamento em vez da visualização
+        return redirect(url_for('proposta.compartilhar', id_publico=id_publico))
     
     return render_template('nova_proposta.html', form=form)
-
 @dashboard_bp.route('/excluir-proposta/<int:id>', methods=['POST'])
 @login_required
 def excluir_proposta(id):
