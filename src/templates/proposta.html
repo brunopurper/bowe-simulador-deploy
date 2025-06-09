@@ -10,7 +10,7 @@
 <style>
 /* Estilos específicos para garantir que o novo layout funcione corretamente */
 body { 
-    background-color: #f8f9fa;
+    background-color: var(--bowe-gray-lightest );
     padding: 0;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
@@ -21,6 +21,204 @@ body {
 main {
     padding: 0;
     margin: 0;
+}
+.share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+.share-button {
+    padding: 10px 20px;
+    border-radius: var(--bowe-radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--bowe-transition);
+    box-shadow: var(--bowe-shadow);
+}
+.share-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--bowe-shadow-lg);
+    color: white;
+    text-decoration: none;
+}
+.share-button i {
+    margin-right: 8px;
+}
+.whatsapp-btn {
+    background-color: #25D366;
+}
+.email-btn {
+    background-color: var(--bowe-blue);
+}
+.copy-btn {
+    background-color: var(--bowe-gray-dark);
+    cursor: pointer;
+}
+.telegram-btn {
+    background-color: #0088cc;
+}
+.copy-success {
+    background-color: var(--bowe-green);
+}
+
+/* Novos estilos para destacar a economia anual - usando variáveis do tema */
+.annual-savings-banner {
+    background: var(--bowe-gradient-economy);
+    color: var(--bowe-white);
+    border-radius: var(--bowe-radius-lg);
+    padding: 25px;
+    margin: 30px 0;
+    box-shadow: var(--bowe-shadow-lg);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.annual-savings-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0.6;
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0.95);
+        opacity: 0.6;
+    }
+}
+
+.annual-savings-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 2;
+}
+
+.annual-savings-value {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 10px 0;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.annual-savings-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    position: relative;
+    z-index: 2;
+}
+
+.savings-badge {
+    display: inline-block;
+    background-color: rgba(255,255,255,0.2);
+    padding: 5px 15px;
+    border-radius: var(--bowe-radius-xl);
+    margin-top: 10px;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+}
+
+.savings-badge i {
+    margin-right: 5px;
+}
+
+.economy-highlight {
+    margin-top: 20px;
+}
+
+.economy-comparison {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 20px;
+}
+
+.economy-monthly, .economy-annual {
+    flex: 1;
+    padding: 15px;
+    border-radius: var(--bowe-radius);
+    text-align: center;
+    transition: var(--bowe-transition);
+}
+
+.economy-monthly {
+    background-color: var(--bowe-gray-light);
+    border: 1px solid var(--bowe-gray);
+}
+
+.economy-annual {
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    transform: scale(1.05);
+    box-shadow: var(--bowe-shadow);
+}
+
+.economy-label {
+    font-size: 0.9rem;
+    color: var(--bowe-gray-dark);
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.economy-amount {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--bowe-text-primary);
+}
+
+.economy-annual .economy-label {
+    color: var(--bowe-green-dark);
+}
+
+.economy-annual .economy-amount {
+    color: var(--bowe-green-dark);
+    font-size: 1.8rem;
+}
+
+/* Ícone de destaque para economia anual */
+.annual-star {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: var(--bowe-yellow);
+    color: var(--bowe-text-primary);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    box-shadow: var(--bowe-shadow);
+    z-index: 3;
 }
 </style>
 {% endblock %}
@@ -39,7 +237,7 @@ main {
     <div class="proposal-content">
         <!-- Informações do Cliente -->
         <div class="client-info">
-            <h2 class="section-title"><i class="fas fa-user"></i> Informações do Cliente</h2>
+            <h2 class="section-title2"><i class="fas fa-user"></i> Informações do Cliente</h2>
             <div class="info-grid">
                 <div class="info-item">
                     <span class="info-label">Nome do Cliente</span>
@@ -62,6 +260,10 @@ main {
                     <span class="info-value">{{ proposta.mes_atual }}</span>
                 </div>
                 <div class="info-item">
+                    <span class="info-label">Tipo de Contrato</span>
+                    <span class="info-value">{{ proposta.modelo_contrato }}</span>
+                </div>
+                <div class="info-item" >
                     <span class="info-label">Status</span>
                     {% set status_class = "status-pendente" %}
                     {% if proposta.status == "Aprovada" %}
@@ -121,7 +323,7 @@ main {
                 <!-- Total Atual - Azul escuro para mostrar importância -->
                 <div class="financial-card total">
                     <div class="card-title">
-                        <i class="fas fa-calculator"></i> Total Atual
+                        <i class="fas fa-calculator"></i> Total Atual (Concessionária)
                     </div>
                     <div class="card-value">R$ {{ "{:,.2f}".format(proposta.pagar_energisa_mais_bandeira).replace(',', '.').replace('.', ',') }}</div>
                     <div class="trust-badge">
@@ -133,7 +335,7 @@ main {
                 <!-- Valor com Bowe - Verde para representar a solução e economia -->
                 <div class="financial-card highlight">
                     <div class="card-title">
-                        <i class="fas fa-leaf"></i> Valor com Bowe ({{ "{:.1f}".format(proposta.percentual_desconto).replace('.', ',') }}% desconto)
+                        <i class="fas fa-leaf"></i> Valor da sua fatura com a Bowe ({{ "{:.1f}".format(proposta.percentual_desconto).replace('.', ',') }}% desconto)
                         <span class="card-indicator"><i class="fas fa-star"></i></span>
                     </div>
                     <div class="card-value">R$ {{ "{:,.2f}".format(proposta.pagar_enersim).replace(',', '.').replace('.', ',') }}</div>
@@ -145,15 +347,23 @@ main {
         </div>
 
         <!-- Destaque da Economia - Tratamento especial para o ponto-chave de venda -->
-        <div class="economy-highlight">
-            <div class="economy-title"><i class="fas fa-coins"></i> Sua Economia Mensal</div>
-            <div class="economy-value">R$ {{ "{:,.2f}".format(proposta.economia).replace(',', '.').replace('.', ',') }}</div>
-            <div class="economy-subtitle">Economia anual estimada de R$ {{ "{:,.2f}".format(proposta.economia_anual).replace(',', '.').replace('.', ',') }} ({{ "{:.1f}".format(proposta.percentual_desconto).replace('.', ',') }}% de desconto)</div>
-            <div class="trust-badge">
-                <i class="fas fa-shield-alt"></i> Garantia de economia
+        
+      <div class="economy-highlight">
+            <h2 class="section-title"><i class="fas fa-coins"></i> Sua Economia</h2>
+            
+            <div class="economy-comparison">
+                <div class="economy-monthly">
+                    <div class="economy-label">ECONOMIA MENSAL</div>
+                    <div class="economy-amount">R$ {{ "{:,.2f}".format(proposta.economia).replace(',', '.').replace('.', ',') }}</div>
+                </div>
+                
+                <div class="economy-annual" style="position: relative;">
+                    <div class="annual-star"><i class="fas fa-star"></i></div>
+                    <div class="economy-label">ECONOMIA ANUAL</div>
+                    <div class="economy-amount">R$ {{ "{:,.2f}".format(proposta.economia_anual).replace(',', '.').replace('.', ',') }}</div>
+                </div>
             </div>
         </div>
-
         <!-- Ações -->
         <div class="actions">
             <!-- Approve Form - Botão de destaque -->
@@ -235,15 +445,61 @@ main {
             });
         });
         
-        // Destaca o card de economia com um pulso sutil
-        const economyHighlight = document.querySelector('.economy-highlight');
-        if (economyHighlight) {
+        // Destaca o banner de economia anual com um pulso sutil
+        const annualBanner = document.querySelector('.annual-savings-banner');
+        if (annualBanner) {
             setTimeout(() => {
-                economyHighlight.style.transform = 'scale(1.05)';
+                annualBanner.style.transform = 'scale(1.02)';
                 setTimeout(() => {
-                    economyHighlight.style.transform = 'scale(1.03)';
+                    annualBanner.style.transform = 'scale(1)';
+                }, 300);
+            }, 500);
+            
+            // Repete o efeito a cada 5 segundos
+            setInterval(() => {
+                annualBanner.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    annualBanner.style.transform = 'scale(1)';
                 }, 300);
             }, 1000);
+        }
+        
+        // Funcionalidade para copiar o link
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        if (copyLinkBtn) {
+            copyLinkBtn.addEventListener('click', function() {
+                const link = this.getAttribute('data-link');
+                
+                // Cria um elemento temporário para copiar o texto
+                const tempInput = document.createElement('input');
+                tempInput.value = link;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                
+                // Feedback visual
+                this.classList.add('copy-success');
+                const originalIcon = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i> Link Copiado!';
+                
+                // Restaurar após 2 segundos
+                setTimeout(() => {
+                    this.classList.remove('copy-success');
+                    this.innerHTML = originalIcon;
+                }, 1000);
+            });
+        }
+        
+        // Efeito de destaque para a economia anual na comparação
+        const economyAnnual = document.querySelector('.economy-annual');
+        if (economyAnnual) {
+            setTimeout(() => {
+                economyAnnual.style.transform = 'scale(1.08)';
+                setTimeout(() => {
+                    economyAnnual.style.transform = 'scale(1.05)';
+                }, 300);
+            }, 1500);
         }
     });
 </script>

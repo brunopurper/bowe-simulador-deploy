@@ -215,6 +215,26 @@
                         <div class="detail-value">{{ formulario.telefone }}</div>
                     </div>
                     <div class="detail-row">
+                        <div class="detail-label">E-mail:</div>
+                        <div class="detail-value">{{ formulario.email or "-" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Estado Civil:</div>
+                        <div class="detail-value">{{ formulario.estado_civil or "-" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">CPF:</div>
+                        <div class="detail-value">{{ formulario.cpf or "-" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">RG:</div>
+                        <div class="detail-value">{{ formulario.rg or "-" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Naturalidade:</div>
+                        <div class="detail-value">{{ formulario.naturalidade or "-" }}</div>
+                    </div>
+                    <div class="detail-row">
                         <div class="detail-label">Data de Envio:</div>
                         <div class="detail-value">{{ formulario.data_submissao.strftime('%d/%m/%Y às %H:%M') }}</div>
                     </div>

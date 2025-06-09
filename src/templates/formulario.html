@@ -7,404 +7,113 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
-    .form-container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 30px;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-    
-    .form-title {
-        color: #2c3e50;
-        font-size: 28px;
-        margin-bottom: 10px;
-        text-align: center;
-        font-weight: 600;
-    }
-    
-    .form-subtitle {
-        color: #7f8c8d;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    
-    .form-section {
-        margin-bottom: 30px;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        border-left: 4px solid #3498db;
-    }
-    
-    .form-section-title {
-        color: #3498db;
-        font-size: 18px;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-    
-    .form-group {
-        margin-bottom: 20px;
-    }
-    
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #34495e;
-    }
-    
-    .required-field:after {
-        content: " *";
-        color: #e74c3c;
-    }
-    
-    .form-control {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 16px;
-        transition: border 0.3s;
-    }
-    
-    .form-control:focus {
-        border-color: #3498db;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    }
-    
-    .file-input-container {
-        position: relative;
-        margin-bottom: 20px;
-    }
-    
-    .file-input-label {
-        display: block;
-        padding: 12px 15px;
-        background: #f1f5f9;
-        border: 1px dashed #3498db;
-        border-radius: 6px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    
-    .file-input-label:hover {
-        background: #e1edf7;
-    }
-    
-    .file-input {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
-    }
-    
-    .file-name {
-        margin-top: 8px;
-        font-size: 14px;
-        color: #7f8c8d;
-    }
-    
-    .btn-submit {
-        display: block;
-        width: 100%;
-        padding: 14px;
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 18px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        text-align: center;
-    }
-    
-    .btn-submit:hover {
-        background: linear-gradient(135deg, #2980b9, #3498db);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-    }
-    
-    /* Modal de erro */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.5);
-    }
-    
-    .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border-radius: 10px;
-        width: 80%;
-        max-width: 500px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        animation: modalFadeIn 0.3s;
-    }
-    
-    @keyframes modalFadeIn {
-        from {opacity: 0; transform: translateY(-30px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
-    
-    .modal-header {
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
-        position: relative;
-    }
-    
-    .modal-title {
-        margin: 0;
-        color: #2c3e50;
-        font-size: 20px;
-        font-weight: 600;
-    }
-    
-    .modal-error .modal-header {
-        border-bottom-color: #e74c3c;
-    }
-    
-    .modal-error .modal-title {
-        color: #e74c3c;
-    }
-    
-    .modal-body {
-        padding: 20px 0;
-    }
-    
-    .modal-footer {
-        padding: 10px 0;
-        border-top: 1px solid #eee;
-        text-align: right;
-    }
-    
-    .close {
-        position: absolute;
-        right: 0;
-        top: 0;
-        color: #aaa;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    
-    .close:hover {
-        color: #555;
-    }
-    
-    .modal-btn {
-        padding: 8px 16px;
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    
-    .modal-btn:hover {
-        background-color: #2980b9;
-    }
-    
-    .error-list {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-    
-    .error-item {
-        padding: 8px 0;
-        color: #e74c3c;
-        border-bottom: 1px solid #f8f9fa;
-    }
-    
-    .error-item:last-child {
-        border-bottom: none;
-    }
-    
-    .error-icon {
-        margin-right: 8px;
-        color: #e74c3c;
-    }
+    .form-container { max-width: 800px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    .form-title { color: #2c3e50; font-size: 28px; margin-bottom: 10px; text-align: center; font-weight: 600; }
+    .form-subtitle { color: #7f8c8d; text-align: center; margin-bottom: 30px; }
+    .form-section { margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #3498db; }
+    .form-section-title { color: #3498db; font-size: 18px; margin-bottom: 20px; font-weight: 600; }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; margin-bottom: 8px; font-weight: 500; color: #34495e; }
+    .required-field:after { content: "*"; color: red; margin-left: 4px; }
+    .file-input-container { display: flex; align-items: center; gap: 10px; }
+    .file-input-label { cursor: pointer; background: #3498db; color: #fff; padding: 8px 15px; border-radius: 4px; display: flex; align-items: center; gap: 5px; }
+    .file-input { display: none; }
+    .file-name { color: #7f8c8d; font-size: 14px; }
+    .btn-submit { display: block; width: 100%; background: #3498db; color: #fff; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; transition: background 0.3s ease; }
+    .btn-submit:hover { background: #2980b9; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <h1 class="form-title">Complete seu cadastro</h1>
-    <p class="form-subtitle">Sua proposta foi aprovada! Preencha os dados abaixo para finalizar o processo.</p>
-    
-    <form action="{{ url_for('formulario.formulario', id_publico=proposta.id_publico) }}" method="POST" enctype="multipart/form-data" id="clienteForm">
-        <!-- Dados Pessoais -->
+    <h1 class="form-title">Formulário de Continuidade</h1>
+    <p class="form-subtitle">Preencha as informações abaixo para continuar com a sua proposta.</p>
+
+    <form action="{{ url_for('formulario.formulario', id_publico=proposta.id_publico) }}" method="POST" enctype="multipart/form-data" id="clienteForm" novalidate>
         <div class="form-section">
             <h2 class="form-section-title"><i class="fas fa-user"></i> Dados Pessoais</h2>
-            
+
             <div class="form-group">
                 <label for="nome_completo" class="form-label required-field">Nome Completo</label>
-                <input type="text" id="nome_completo" name="nome_completo" class="form-control" value="{{ proposta.nome_indicado }}" required>
+                <input type="text" id="nome_completo" name="nome_completo" class="form-control" value="{{ proposta.nome_indicado }}">
             </div>
-            
+
             <div class="form-group">
                 <label for="telefone" class="form-label required-field">Telefone</label>
-                <input type="tel" id="telefone" name="telefone" class="form-control" value="{{ proposta.telefone_indicado or '' }}" placeholder="(00) 00000-0000" required>
+                <input type="tel" id="telefone" name="telefone" class="form-control" value="{{ proposta.telefone_indicado or '' }}" placeholder="(00) 00000-0000">
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label required-field">E-mail</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="exemplo@dominio.com">
+            </div>
+
+            <div class="form-group">
+                <label for="estado_civil" class="form-label required-field">Estado Civil</label>
+                <select id="estado_civil" name="estado_civil" class="form-control">
+                    <option value="">Selecione</option>
+                    <option value="Solteiro(a)">Solteiro(a)</option>
+                    <option value="Casado(a)">Casado(a)</option>
+                    <option value="Divorciado(a)">Divorciado(a)</option>
+                    <option value="Viúvo(a)">Viúvo(a)</option>
+                    <option value="União Estável">União Estável</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cpf" class="form-label required-field">CPF</label>
+                <input type="text" id="cpf" name="cpf" class="form-control" placeholder="000.000.000-00">
+            </div>
+
+            <div class="form-group">
+                <label for="rg" class="form-label required-field">RG</label>
+                <input type="text" id="rg" name="rg" class="form-control" placeholder="00.000.000-0">
+            </div>
+
+            <div class="form-group">
+                <label for="naturalidade" class="form-label required-field">Naturalidade</label>
+                <input type="text" id="naturalidade" name="naturalidade" class="form-control" placeholder="Cidade e Estado">
             </div>
         </div>
-        
-        <!-- Documentos -->
+
         <div class="form-section">
             <h2 class="form-section-title"><i class="fas fa-file-upload"></i> Documentação</h2>
-            
+
             <div class="form-group">
-                <label for="documento" class="form-label required-field">Documento com foto e CPF</label>
+                <label for="documento" class="form-label required-field">Documento com foto</label>
                 <div class="file-input-container">
                     <label for="documento" class="file-input-label">
                         <i class="fas fa-id-card"></i> Selecionar arquivo
                     </label>
-                    <input type="file" id="documento" name="documento" class="file-input" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <input type="file" id="documento" name="documento" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
                     <div id="documento-name" class="file-name">Nenhum arquivo selecionado</div>
                 </div>
-                <small>Formatos aceitos: PDF, JPG, PNG (máx. 16MB)</small>
+                <small>Formatos aceitos: PDF, JPG, PNG (máx. 3MB)</small>
             </div>
-            
+
             <div class="form-group">
                 <label for="conta_luz" class="form-label required-field">Conta de luz atualizada</label>
                 <div class="file-input-container">
                     <label for="conta_luz" class="file-input-label">
                         <i class="fas fa-file-invoice"></i> Selecionar arquivo
                     </label>
-                    <input type="file" id="conta_luz" name="conta_luz" class="file-input" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <input type="file" id="conta_luz" name="conta_luz" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
                     <div id="conta_luz-name" class="file-name">Nenhum arquivo selecionado</div>
                 </div>
-                <small>Formatos aceitos: PDF, JPG, PNG (máx. 16MB)</small>
+                <small>Formatos aceitos: PDF, JPG, PNG (máx. 3MB)</small>
             </div>
         </div>
-        
+
         <button type="submit" class="btn-submit">
             <i class="fas fa-paper-plane"></i> Enviar Documentação
         </button>
     </form>
 </div>
 
-<!-- Modal de Erro -->
-<div id="errorModal" class="modal modal-error">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 class="modal-title"><i class="fas fa-exclamation-circle"></i> Erro no Formulário</h2>
-            <span class="close">&times;</span>
-        </div>
-        <div class="modal-body">
-            <ul class="error-list" id="errorList">
-                <!-- Erros serão inseridos aqui via JavaScript -->
-            </ul>
-        </div>
-        <div class="modal-footer">
-            <button class="modal-btn" id="errorModalClose">Entendi</button>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Atualizar nome do arquivo selecionado
-        document.getElementById('documento').addEventListener('change', function() {
-            const fileName = this.files[0] ? this.files[0].name : 'Nenhum arquivo selecionado';
-            document.getElementById('documento-name').textContent = fileName;
-        });
-        
-        document.getElementById('conta_luz').addEventListener('change', function() {
-            const fileName = this.files[0] ? this.files[0].name : 'Nenhum arquivo selecionado';
-            document.getElementById('conta_luz-name').textContent = fileName;
-        });
-        
-        // Validação do formulário
-        const form = document.getElementById('clienteForm');
-        form.addEventListener('submit', function(event) {
-            let errors = [];
-            
-            // Validar nome completo
-            const nomeCompleto = document.getElementById('nome_completo').value.trim();
-            if (!nomeCompleto) {
-                errors.push('Nome completo é obrigatório');
-            }
-            
-            // Validar telefone
-            const telefone = document.getElementById('telefone').value.trim();
-            if (!telefone) {
-                errors.push('Telefone é obrigatório');
-            }
-            
-            // Validar documento
-            const documento = document.getElementById('documento').files;
-            if (!documento || documento.length === 0) {
-                errors.push('Documento com foto e CPF é obrigatório');
-            }
-            
-            // Validar conta de luz
-            const contaLuz = document.getElementById('conta_luz').files;
-            if (!contaLuz || contaLuz.length === 0) {
-                errors.push('Conta de luz atualizada é obrigatória');
-            }
-            
-            // Se houver erros, mostrar modal e impedir envio
-            if (errors.length > 0) {
-                event.preventDefault();
-                showErrorModal(errors);
-            }
-        });
-        
-        // Função para mostrar modal de erro
-        function showErrorModal(errors) {
-            const errorList = document.getElementById('errorList');
-            errorList.innerHTML = '';
-            
-            errors.forEach(function(error) {
-                const li = document.createElement('li');
-                li.className = 'error-item';
-                li.innerHTML = `<i class="fas fa-exclamation-circle error-icon"></i> ${error}`;
-                errorList.appendChild(li);
-            });
-            
-            document.getElementById('errorModal').style.display = 'block';
-        }
-        
-        // Fechar modal ao clicar no X ou no botão
-        document.querySelector('.close').addEventListener('click', function() {
-            document.getElementById('errorModal').style.display = 'none';
-        });
-        
-        document.getElementById('errorModalClose').addEventListener('click', function() {
-            document.getElementById('errorModal').style.display = 'none';
-        });
-        
-        // Fechar modal ao clicar fora dele
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('errorModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-        
-        // Mostrar erros do Flask se houver
-        {% with messages = get_flashed_messages(category_filter=["error"]) %}
-            {% if messages %}
-                showErrorModal([{% for message in messages %}"{{ message }}"{% if not loop.last %}, {% endif %}{% endfor %}]);
-            {% endif %}
-        {% endwith %}
-    });
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script src="{{ url_for('static', filename='js/formulario.js') }}"></script>
 {% endblock %}

@@ -12,6 +12,11 @@ class FormularioCliente(db.Model):
     # Dados pessoais
     nome_completo = db.Column(db.String(150), nullable=False)
     telefone = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(150), nullable=True)
+    estado_civil = db.Column(db.String(50), nullable=True)
+    cpf = db.Column(db.String(20), nullable=True)
+    rg = db.Column(db.String(20), nullable=True)
+    naturalidade = db.Column(db.String(100), nullable=True)
     
     # Arquivos
     documento_filename = db.Column(db.String(255), nullable=False)
@@ -30,6 +35,11 @@ class FormularioCliente(db.Model):
             'data_submissao': self.data_submissao.strftime('%Y-%m-%d %H:%M:%S'),
             'nome_completo': self.nome_completo,
             'telefone': self.telefone,
+            'email': self.email,
+            'estado_civil': self.estado_civil,
+            'cpf': self.cpf,
+            'rg': self.rg,
+            'naturalidade': self.naturalidade,
             'documento_filename': self.documento_filename,
             'conta_luz_filename': self.conta_luz_filename
         }
