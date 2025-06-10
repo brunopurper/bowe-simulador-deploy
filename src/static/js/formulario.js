@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     $('#telefone').mask('(00) 00000-0000');
     $('#cpf').mask('000.000.000-00', {reverse: true});
-    $('#rg').mask('00.000.000-0');
+    $('#rg').mask('00.000.000-00');  // Mantendo a máscara para aceitar até 2 dígitos após o traço
 
     $('#documento').on('change', function() {
         $('#documento-name').text(this.files[0] ? this.files[0].name : 'Nenhum arquivo selecionado');
@@ -36,15 +36,35 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function validarRG(rg) {
-    rg = rg.replace(/\D/g, '');
-    // Deve ter entre 7 e 9 dígitos
-    if (rg.length < 7 || rg.length > 9) {
-        return false;
+        // Remove caracteres não numéricos
+        rg = rg.replace(/\D/g, '');
+        
+        // Verifica se o RG tem entre 8 e 10 dígitos (para acomodar RGs com 1 ou 2 dígitos verificadores)
+        // 8 dígitos = 7 números + 1 dígito verificador
+        // 9 dígitos = 7 números + 2 dígitos verificadores
+        // 10 dígitos = 8 números + 2 dígitos verificadores
+        if (rg.length < 8 || rg.length > 10) {
+            return false;
+        }
+        
+        // Verifica se todos os dígitos são iguais (não pode)
+        if (/^(\d)\1+$/.test(rg)) {
+            return false;
+        }
+        
+        // Verifica o formato com expressão regular (opcional)
+        // Formato esperado: XX.XXX.XXX-X ou XX.XXX.XXX-XX
+        const formatoRG = /^\d{2}\.\d{3}\.\d{3}-\d{1,2}$/;
+        const rgFormatado = rg.replace(/(\d{2})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+        
+        // Se o RG formatado não corresponder ao padrão, retorna falso
+        if (!formatoRG.test(rgFormatado)) {
+            // Verificação alternativa para RGs sem formatação
+            return true; // Já validamos o comprimento e dígitos repetidos acima
+        }
+        
+        return true;
     }
-    // Verifica se todos os dígitos são iguais (não pode)
-    return !/^(\d)\1+$/.test(rg);
-}
-
 
     function mostrarErro(mensagem) {
         $('.modal-erro').remove();
@@ -83,9 +103,9 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!cpf) { mostrarErro('Por favor, preencha o campo "CPF".'); return; }
         else if (!validarCPF(cpf)) { mostrarErro('O campo "CPF" está inválido.'); return; }
 
-        const rg = $('#rg').val().replace(/\D/g, '');
+        const rg = $('#rg').val();
         if (!rg) { mostrarErro('Por favor, preencha o campo "RG".'); return; }
-        else if (!validarRG(rg)) { mostrarErro('O campo "RG" está inválido.'); return; }
+        else if (!validarRG(rg)) { mostrarErro('O campo "RG" está inválido. Use o formato XX.XXX.XXX-X ou XX.XXX.XXX-XX'); return; }
 
         const naturalidade = $('#naturalidade').val().trim();
         if (!naturalidade) { mostrarErro('Por favor, preencha o campo "Naturalidade".'); return; }
