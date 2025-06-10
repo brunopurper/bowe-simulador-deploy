@@ -33,7 +33,7 @@
   --bowe-text-light: #ffffff;
   
   /* Gradients */
-  --bowe-gradient-header: linear-gradient(120deg, var(--bowe-blue-dark) 0%, var(--bowe-purple) 100%);
+  --bowe-gradient-header: linear-gradient(90deg ,#D6218F,#CA3CAD,#B653C8,#9B67DF,#7578F0,#6076F1,#4375F2,#0073F2,#0060E7,#004CDB,#0037CD,#001EBE);
   --bowe-gradient-success: linear-gradient(120deg, var(--bowe-green) 0%, var(--bowe-green-dark) 100%);
   --bowe-gradient-danger: linear-gradient(120deg, var(--bowe-red) 0%, var(--bowe-red-dark) 100%);
   --bowe-gradient-warning: linear-gradient(120deg, var(--bowe-orange) 0%, var(--bowe-yellow) 100%);
