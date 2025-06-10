@@ -473,6 +473,10 @@ body {
   margin: 0 auto 0.5rem;
 }
 
+.footer-logo-base {
+  width: 30px;
+}
+
 /* Responsive Adjustments */
 @media (min-width: 768px) {
   .proposal-container {
