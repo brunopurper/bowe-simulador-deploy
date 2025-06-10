@@ -185,19 +185,19 @@
                 {% endif %}
             </div>
             
-            <div class="form-group">
-                <label for="mes_atual" class="form-label required-field">Mês de Referência</label>
-                {{ form.mes_atual(class="form-control", placeholder="Ex: Junho/2025") }}
-                {% if form.mes_atual.errors %}
-                    <div class="text-danger">
-                        {% for error in form.mes_atual.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+<div class="form-group">
+            <label for="mes_atual" class="form-label required-field">Mês de Referência</label>
+            {{ form.mes_atual(class="form-control datepicker", placeholder="Selecione o mês/ano") }}
+            {% if form.mes_atual.errors %}
+                <div class="text-danger">
+                    {% for error in form.mes_atual.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="help-text">Selecione o mês e ano da referência</div>
         </div>
-        
+        </div>
         <!-- Dados de Tarifas -->
         <div class="form-section">
             <h2 class="form-section-title"><i class="fas fa-dollar-sign"></i> Dados de Tarifas</h2>
@@ -218,7 +218,7 @@
                 <div class="help-text">Valor da tarifa da concessionária com impostos incluídos</div>
             </div>
             
-            <div class="form-group">
+                        <div class="form-group">
                 <label for="taxa_bandeira" class="form-label">Taxa Bandeira (R$/kWh)</label>
                 <div class="input-group">
                     {{ form.taxa_bandeira(class="form-control", placeholder="Ex: 0.04") }}
@@ -233,7 +233,7 @@
                 {% endif %}
                 <div class="help-text">Valor adicional da bandeira tarifária (se houver)</div>
             </div>
-            
+
             <div class="form-group">
                 <label for="percentual_desconto" class="form-label required-field">Percentual de Desconto</label>
                 {{ form.percentual_desconto(class="form-control") }}
