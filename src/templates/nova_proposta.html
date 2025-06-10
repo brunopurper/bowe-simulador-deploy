@@ -118,7 +118,7 @@
 {% block content %}
 <div class="form-container">
     <h1 class="form-title">Nova Proposta</h1>
-    <p class="form-subtitle">Preencha os dados abaixo para criar uma nova proposta</p>
+    <p class="form-subtitle">Preencha os dados abaixo para criar uma nova proposta simples para o cliente</p>
     
     <form method="POST" action="{{ url_for('dashboard.nova_proposta') }}">
         {{ form.csrf_token }}
