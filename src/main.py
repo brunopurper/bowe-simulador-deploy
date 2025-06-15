@@ -11,33 +11,32 @@ from src.models.proposta import Proposta  # necessário para o errohandler
 
 def create_app():
     app = Flask(__name__)
-    
+
     # Configuração do banco de dados
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bowe_simulador.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'bowe-simulador-secret-key')
-    
+
     # Configuração para uploads de arquivos
     app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
     app.config['MAX_CONTENT_LENGTH'] = 6 * 1024 * 1024  # 6 MB
 
-    
     # Criar diretórios de upload se não existirem
     os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'documentos'), exist_ok=True)
     os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'contas_luz'), exist_ok=True)
-    
+
     # Inicializar extensões
     db.init_app(app)
-    
+
     # Registrar blueprints
     app.register_blueprint(formulario_bp)
     app.register_blueprint(proposta_bp)
     app.register_blueprint(dashboard_bp)
-    
+
     # Criar tabelas do banco de dados
     with app.app_context():
         db.create_all()
-    
+
     # Tratar erro de Request Entity Too Large (413)
     @app.errorhandler(413)
     def request_entity_too_large(error):
@@ -46,11 +45,17 @@ def create_app():
         id_publico = request.url.split('/')[4]
         proposta = Proposta.query.filter_by(id_publico=id_publico).first()
         return render_template('formulario.html', proposta=proposta), 413
-    
+
+    # Rota principal para o Nginx proxy_pass e teste de vida
+    @app.route('/')
+    def index():
+        return "Simulador Bowe rodando com HTTPS!"
+
     return app
 
 # Criar a aplicação para o Gunicorn
 app = create_app()
 
 if __name__ == '__main__':
+    print("Iniciando o Simulador Bowe...")
     app.run(host='0.0.0.0', port=5000, debug=True)

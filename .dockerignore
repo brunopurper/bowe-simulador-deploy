@@ -1,0 +1,19 @@
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Banco de dados local
+instance/bowe_simulador.db
+
+# Uploads (opcional)
+src/uploads/*
+
+# Git e arquivos de controle
+.git/
+.gitignore
+
+# Outros arquivos temporários
+*.swp
+*.swo
