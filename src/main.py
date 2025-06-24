@@ -19,7 +19,7 @@ def create_app():
 
     # Configuração para uploads de arquivos
     app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
-    app.config['MAX_CONTENT_LENGTH'] = 6 * 1024 * 1024  # 6 MB
+    app.config['MAX_CONTENT_LENGTH'] = 30 * 1024 * 1024  # 50 MB
 
     # Criar diretórios de upload se não existirem
     os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'documentos'), exist_ok=True)
@@ -40,7 +40,7 @@ def create_app():
     # Tratar erro de Request Entity Too Large (413)
     @app.errorhandler(413)
     def request_entity_too_large(error):
-        flash('O arquivo enviado excede o limite de 3 MB.', 'error')
+        flash('O arquivo enviado excede o limite.', 'error')
         # Pega o id_publico da URL, que está no formato: /proposta/<id_publico>/formulario
         id_publico = request.url.split('/')[4]
         proposta = Proposta.query.filter_by(id_publico=id_publico).first()
